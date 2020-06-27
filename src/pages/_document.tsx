@@ -43,8 +43,13 @@ class BaseDocument extends Document {
           />
           <link
             rel="mask-icon"
-            color="#000"
+            color="#335BC4"
             href="/assets/img/site-icons/mask.svg"
+          />
+
+          <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&amp;display=swap"
           />
         </Head>
         <body>
