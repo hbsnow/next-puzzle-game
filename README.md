@@ -1,1 +1,1 @@
-# next-puzzle-game
+# next-collection-game

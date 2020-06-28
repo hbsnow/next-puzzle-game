@@ -1,14 +1,15 @@
 import React from "react";
 
 import { NextPage } from "next";
+import { useAuth } from "react-use-auth";
 
-import DefaultTemplate from "./Templates/DefaultTemplate";
+import LoginTemplate from "../templates/LoginTemplate";
 
 const Page: NextPage = () => {
   return (
-    <>
-      <DefaultTemplate>sample</DefaultTemplate>
-    </>
+    <LoginTemplate>
+      <pre>{JSON.stringify(useAuth().user, null, 2)}</pre>
+    </LoginTemplate>
   );
 };
 
