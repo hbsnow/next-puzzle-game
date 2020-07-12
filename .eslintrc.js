@@ -1,20 +1,24 @@
+"use strict";
+
 module.exports = {
-  extends: ["eslint:recommended", "plugin:prettier/recommended"],
+  extends: [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:prettier/recommended",
+    "prettier",
+  ],
   env: {
     browser: true,
     node: true,
-    es2020: true,
+    es6: true,
   },
   parserOptions: {
     ecmaVersion: 2020,
   },
-  rules: {},
   overrides: [
     {
       files: ["**/*.{ts,tsx}"],
       extends: [
-        "eslint:recommended",
-        "plugin:react/recommended",
         "plugin:@typescript-eslint/recommended",
         "prettier/@typescript-eslint",
       ],
@@ -27,16 +31,15 @@ module.exports = {
       },
       parserOptions: {
         sourceType: "module",
-        project: "./tsconfig.json",
         ecmaFeatures: {
           jsx: true,
         },
       },
       plugins: ["@typescript-eslint", "react", "react-hooks", "import"],
       rules: {
-        "no-unused-vars": "off",
+        "no-unused-vars": 0,
         "import/order": [
-          "error",
+          2,
           {
             groups: ["builtin", "external", "internal"],
             pathGroups: [
@@ -54,10 +57,11 @@ module.exports = {
             },
           },
         ],
-        "@typescript-eslint/no-unused-vars": "error",
-        "react/prop-types": "off",
-        "react-hooks/rules-of-hooks": "error",
-        "react-hooks/exhaustive-deps": "error",
+        "@typescript-eslint/no-unused-vars": 2,
+        "react/jsx-no-target-blank": 2,
+        "react/prop-types": 0,
+        "react-hooks/rules-of-hooks": 2,
+        "react-hooks/exhaustive-deps": 2,
       },
     },
   ],

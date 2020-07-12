@@ -1,16 +1,19 @@
 {
   "name": "next-puzzle-game",
-  "version": "1.0.0",
-  "main": "index.js",
   "author": "hbsnow <yuki.4uing@gmail.com>",
   "license": "UNLICENSED",
   "private": true,
+  "workspaces": {
+    "packages": [
+      "src/*"
+    ]
+  },
   "scripts": {
-    "dev": "next",
-    "build": "next build",
-    "start": "next start",
+    "dev:app": "yarn workspace app dev",
+    "dev:api": "yarn workspace api dev",
+    "dev": "run-p dev:*",
+    "lint:app": "eslint './src/app/**/*.{ts,tsx}'",
     "yarn-deduplicate": "npx yarn-deduplicate yarn.lock"
-
   },
   "browserslist": [
     ">0.3%",
