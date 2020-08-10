@@ -11,7 +11,7 @@
   "scripts": {
     "dev:app": "yarn workspace app dev",
     "dev:api": "yarn workspace api dev",
-    "dev": "run-p dev:*",
+    "dev": "dev:app",
     "lint:app": "eslint './src/app/**/*.{ts,tsx}'",
     "yarn-deduplicate": "npx yarn-deduplicate yarn.lock"
   },

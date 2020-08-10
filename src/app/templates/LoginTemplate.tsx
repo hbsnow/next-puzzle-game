@@ -1,24 +1,15 @@
 import React, { FC } from "react";
 
-import { useAuth } from "react-use-auth";
+import { useAuth0 } from "@auth0/auth0-react";
 
-const LoginTemplate: FC = ({ children }) => {
-  const { isAuthenticated, login, logout } = useAuth();
+const LoginTemplate: FC = () => {
+  const { loginWithRedirect } = useAuth0();
 
-  return isAuthenticated() ? (
-    <div className="root">
-      <div className="header">header</div>
-      <main>
-        {children}
-        <button onClick={logout}>logout</button>
-      </main>
-      <div className="footer">footer</div>
-    </div>
-  ) : (
+  return (
     <>
-      <button onClick={login}>Login</button>
+      <button onClick={loginWithRedirect}>Login</button>
     </>
   );
 };
 
-export default LoginTemplate;
+export { LoginTemplate };
