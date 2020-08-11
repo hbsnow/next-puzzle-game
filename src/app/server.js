@@ -1,3 +1,5 @@
+// https://auth0.com/blog/jp-developing-real-time-apps-with-firebase-and-firestone/
+// https://auth0.com/docs/quickstart/spa/react/02-calling-an-api#specify-the-api-audience
 const express = require("express");
 const next = require("next");
 const cors = require("cors");
@@ -16,7 +18,7 @@ const jwtCheck = jwt({
     jwksRequestsPerMinute: 5,
     jwksUri: `https://${process.env.AUTH0_DOMAIN}/.well-known/jwks.json`,
   }),
-  audience: process.env.AUTH0_CLIENT_ID,
+  audience: `https://${process.env.AUTH0_DOMAIN}/api/v2/`,
   issuer: `https://${process.env.AUTH0_DOMAIN}/`,
   algorithms: ["RS256"],
 });
@@ -36,7 +38,6 @@ app.prepare().then(() => {
 
   server.get("/firebase", jwtCheck, async (req, res) => {
     const { sub: uid } = req.user;
-    console.log(req.user);
 
     try {
       const firebaseToken = await firebaseAdmin.auth().createCustomToken(uid);
@@ -50,7 +51,6 @@ app.prepare().then(() => {
   });
 
   server.all("*", (req, res) => {
-    console.log("****");
     return handle(req, res);
   });
 
