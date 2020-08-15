@@ -1,15 +1,14 @@
 import React, { FC } from "react";
 
-import { useAuth0 } from "@auth0/auth0-react";
+import { Auth0ContextInterface } from "@auth0/auth0-react";
 
-const LoginTemplate: FC = () => {
-  const { loginWithRedirect } = useAuth0();
+// todo: あとでuseContextに変える
+type Props = Pick<Auth0ContextInterface, "loginWithRedirect">;
 
+export const LoginTemplate: FC<Props> = ({ loginWithRedirect }) => {
   return (
     <>
       <button onClick={loginWithRedirect}>Login</button>
     </>
   );
 };
-
-export { LoginTemplate };
