@@ -1,8 +1,6 @@
 module.exports = () => {
   return {
     env: {
-      AUTH0_DOMAIN: process.env.AUTH0_DOMAIN,
-      AUTH0_CLIENT_ID: process.env.AUTH0_CLIENT_ID,
       FIREBASE_API_KEY: process.env.FIREBASE_API_KEY,
       FIREBASE_AUTH_DOMAIN: process.env.FIREBASE_AUTH_DOMAIN,
       FIREBASE_DATABASE_URL: process.env.FIREBASE_DATABASE_URL,

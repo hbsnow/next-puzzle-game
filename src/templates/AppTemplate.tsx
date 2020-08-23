@@ -1,6 +1,5 @@
 import React, { FC } from "react";
 
-import { Auth0ContextInterface } from "@auth0/auth0-react";
 import { useSelector } from "react-redux";
 
 import {
@@ -9,23 +8,20 @@ import {
   LayoutBody,
   LayoutFooter,
 } from "../components/layout/Layout";
+import { useSignOut } from "../hooks/signOut";
 import { RootState } from "../store";
 
-type Props = {
-  logout: Auth0ContextInterface["logout"];
-};
-
-export const AppTemplate: FC<Props> = ({ logout, children }) => {
-  const user = useSelector((state: RootState) => state.user.payload);
-  console.log(user);
+export const AppTemplate: FC = ({ children }) => {
+  const { userInfo } = useSelector((state: RootState) => state.user);
+  const { signOut } = useSignOut();
 
   return (
     <Layout>
       <LayoutHeader>
         <h1>キラポケモンをシェアするやつ</h1>
-        <button onClick={() => logout({ returnTo: window.location.origin })}>
-          logout
-        </button>
+        {userInfo?.displayName}
+        {userInfo && <img src={userInfo.photoURL} alt={userInfo.displayName} />}
+        <button onClick={signOut}>logout</button>
       </LayoutHeader>
       <LayoutBody>{children}</LayoutBody>
       <LayoutFooter></LayoutFooter>
