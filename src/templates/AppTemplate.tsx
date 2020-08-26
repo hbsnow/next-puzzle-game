@@ -1,30 +1,28 @@
 import React from "react";
 
-import { useSelector } from "react-redux";
-
+import { AppFooter } from "../elements/app/AppFooter";
+import { AppHeader } from "../elements/app/AppHeader";
 import {
   Layout,
   LayoutHeader,
   LayoutBody,
   LayoutFooter,
-} from "../components/layout/Layout";
-import { useSignOut } from "../hooks/signOut";
-import { RootState } from "../store";
+} from "../elements/layout/Layout";
 
 export const AppTemplate: React.FC = ({ children }) => {
-  const { userInfo } = useSelector((state: RootState) => state.user);
-  const { signOut } = useSignOut();
-
   return (
     <Layout>
       <LayoutHeader>
-        <h1>Lucky Pokemon Share</h1>
-        {userInfo?.displayName}
-        {userInfo && <img src={userInfo.photoURL} alt={userInfo.displayName} />}
-        <button onClick={signOut}>Sign Out</button>
+        <header>
+          <AppHeader />
+        </header>
       </LayoutHeader>
       <LayoutBody>{children}</LayoutBody>
-      <LayoutFooter>footer</LayoutFooter>
+      <LayoutFooter>
+        <footer>
+          <AppFooter />
+        </footer>
+      </LayoutFooter>
     </Layout>
   );
 };

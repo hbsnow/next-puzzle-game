@@ -9,7 +9,6 @@ import { setUser, clearUser } from "../store/userSlice";
  * サインイン
  */
 export const useSignIn = (): {
-  isWaitingCallback: boolean;
   isLoading: boolean;
   error?: Error;
   clearError: () => void;
@@ -87,7 +86,6 @@ export const useSignIn = (): {
   }, [dispatch, isWaitingCallback]);
 
   return {
-    isWaitingCallback,
     isLoading,
     error,
     clearError,
