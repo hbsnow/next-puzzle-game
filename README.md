@@ -1,1 +1,1 @@
-# next-collection-game
+# lucky-pokemon-share

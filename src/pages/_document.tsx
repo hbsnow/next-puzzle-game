@@ -22,7 +22,7 @@ class BaseDocument extends Document {
       <Html lang="ja">
         <Head>
           <meta name="theme-color" content="#fff" />
-          <link rel="manifest" href="/manifest.webmanifest" />
+          {/* <link rel="manifest" href="/manifest.webmanifest" /> */}
           <link
             rel="icon"
             type="image/svg+xml"
@@ -45,11 +45,6 @@ class BaseDocument extends Document {
             rel="mask-icon"
             color="#335BC4"
             href="/assets/img/site-icons/mask.svg"
-          />
-
-          <link
-            rel="stylesheet"
-            href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&amp;display=swap"
           />
         </Head>
         <body>
