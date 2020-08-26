@@ -1,4 +1,4 @@
-import firebase from "firebase/app";
+import * as firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/analytics";
 
@@ -13,7 +13,7 @@ const firebaseConfig = {
   measurementId: process.env.FIREBASE_MESUREMENT_ID,
 };
 
-if (typeof window !== undefined && !firebase.apps.length) {
+if (typeof window !== "undefined" && !firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
   firebase.analytics();
 }
