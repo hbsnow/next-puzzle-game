@@ -2,7 +2,7 @@ import { useCallback, useState } from "react";
 
 import { useDispatch } from "react-redux";
 
-import { firebase } from "../services/firebase/client";
+import { auth } from "../services/firebase/client";
 import { clearUser } from "../store/userSlice";
 
 /**
@@ -25,8 +25,7 @@ export const useSignOut = (): {
   const signOut = useCallback(() => {
     setIsLoading(true);
 
-    firebase
-      .auth()
+    auth
       .signOut()
       .then(() => {
         dispatch(clearUser());

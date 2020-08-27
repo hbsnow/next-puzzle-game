@@ -1,8 +1,9 @@
 import { useCallback, useState, useEffect } from "react";
 
+import firebase from "firebase/app";
 import { useDispatch } from "react-redux";
 
-import { firebase } from "../services/firebase/client";
+import { auth } from "../services/firebase/client";
 import { setUser, clearUser } from "../store/userSlice";
 
 /**
@@ -27,8 +28,7 @@ export const useSignIn = (): {
   const signInWithGoogle = useCallback(() => {
     setIsLoading(true);
     const provider = new firebase.auth.GoogleAuthProvider();
-    firebase
-      .auth()
+    auth
       .signInWithPopup(provider)
       .then(() => {
         setIsWaitingCallback(true);
@@ -44,8 +44,7 @@ export const useSignIn = (): {
   const signInWithEmailAndPassword = useCallback(
     (email: string, password: string) => {
       setIsLoading(true);
-      firebase
-        .auth()
+      auth
         .signInWithEmailAndPassword(email, password)
         .then((result) => {
           if (result.user) {
@@ -66,8 +65,7 @@ export const useSignIn = (): {
   useEffect(() => {
     if (isWaitingCallback) {
       setIsLoading(true);
-      firebase
-        .auth()
+      auth
         .getRedirectResult()
         .then((result) => {
           if (result.user) {

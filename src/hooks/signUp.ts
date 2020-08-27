@@ -2,7 +2,7 @@ import { useCallback, useState } from "react";
 
 import { useDispatch } from "react-redux";
 
-import { firebase } from "../services/firebase/client";
+import { auth } from "../services/firebase/client";
 import { clearUser } from "../store/userSlice";
 
 /**
@@ -26,8 +26,7 @@ export const useSignUp = (): {
     (email: string, password: string) => {
       setIsLoading(true);
 
-      firebase
-        .auth()
+      auth
         .createUserWithEmailAndPassword(email, password)
         // .then((result) => {
         //   dispatch(setUser(result.user));

@@ -1,6 +1,7 @@
-import * as firebase from "firebase/app";
+import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/analytics";
+import "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_API_KEY,
@@ -13,9 +14,14 @@ const firebaseConfig = {
   measurementId: process.env.FIREBASE_MESUREMENT_ID,
 };
 
+let auth: firebase.auth.Auth;
+let firestore: firebase.firestore.Firestore;
+
 if (typeof window !== "undefined" && !firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
   firebase.analytics();
+  auth = firebase.auth();
+  firestore = firebase.firestore();
 }
 
-export { firebase };
+export { auth, firestore };

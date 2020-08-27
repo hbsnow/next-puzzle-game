@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import Loader from "../components/loader/Loader";
-import { firebase } from "../services/firebase/client";
+import { auth } from "../services/firebase/client";
 import { RootState } from "../store";
 import { setUser, clearUser } from "../store/userSlice";
 import { AppTemplate } from "./AppTemplate";
@@ -17,7 +17,7 @@ export const AuthGuard: React.FC = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    firebase.auth().onAuthStateChanged((user) => {
+    auth.onAuthStateChanged((user) => {
       setIsLoading(false);
       if (user) {
         dispatch(setUser(user));
