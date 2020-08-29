@@ -1,8 +1,8 @@
 import React from "react";
 
-type Props = {
+type Props = React.PropsWithoutRef<JSX.IntrinsicElements["button"]> & {
   fluid?: boolean;
-} & React.PropsWithoutRef<JSX.IntrinsicElements["button"]>;
+};
 
 export const Buttton: React.FC<Props> = ({ children, ...rest }) => {
   return (

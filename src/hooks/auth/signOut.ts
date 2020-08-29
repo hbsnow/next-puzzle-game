@@ -2,8 +2,8 @@ import { useCallback, useState } from "react";
 
 import { useDispatch } from "react-redux";
 
-import { auth } from "../services/firebase/client";
-import { clearUser } from "../store/userSlice";
+import { auth } from "../../services/firebase/client";
+import { clearUser } from "../../store/userSlice";
 
 /**
  * サインアウト
@@ -22,20 +22,17 @@ export const useSignOut = (): {
     setError(undefined);
   }, []);
 
-  const signOut = useCallback(() => {
+  const signOut = useCallback(async () => {
     setIsLoading(true);
 
-    auth
-      .signOut()
-      .then(() => {
-        dispatch(clearUser());
-      })
-      .catch((err) => {
-        setError(err);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+    try {
+      await auth.signOut();
+      dispatch(clearUser());
+    } catch (err) {
+      setError(err);
+    } finally {
+      setIsLoading(false);
+    }
   }, [dispatch]);
 
   return {

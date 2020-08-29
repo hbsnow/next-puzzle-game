@@ -2,7 +2,7 @@ import React from "react";
 
 import { useSelector } from "react-redux";
 
-import { useSignOut } from "../../hooks/signOut";
+import { useSignOut } from "../../hooks/auth/signOut";
 import { RootState } from "../../store";
 
 export const AppHeader: React.FC = () => {

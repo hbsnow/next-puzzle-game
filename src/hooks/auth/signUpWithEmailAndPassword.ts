@@ -2,13 +2,13 @@ import { useCallback, useState } from "react";
 
 import { useDispatch } from "react-redux";
 
-import { auth } from "../services/firebase/client";
-import { clearUser } from "../store/userSlice";
+import { auth } from "../../services/firebase/client";
+import { clearUser, setUser } from "../../store/userSlice";
 
 /**
  * アカウント作成
  */
-export const useSignUp = (): {
+export const useSignUpWithEmailAndPassword = (): {
   isLoading: boolean;
   error?: Error;
   clearError: () => void;
@@ -23,22 +23,27 @@ export const useSignUp = (): {
   }, []);
 
   const createUserWithEmailAndPassword = useCallback(
-    (email: string, password: string) => {
+    async (email: string, password: string) => {
       setIsLoading(true);
 
-      auth
-        .createUserWithEmailAndPassword(email, password)
-        // .then((result) => {
-        //   dispatch(setUser(result.user));
-        // })
-        .catch((err) => {
-          // https://firebase.google.com/docs/reference/js/firebase.auth.Auth#createuserwithemailandpassword
+      try {
+        const result = await auth.createUserWithEmailAndPassword(
+          email,
+          password
+        );
+        if (result.user) {
+          dispatch(setUser(result.user));
+        } else {
+          // TODO: ここにくるのはどういうケースなのか
           dispatch(clearUser());
-          setError(err);
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
+        }
+      } catch (err) {
+        // https://firebase.google.com/docs/reference/js/firebase.auth.Auth#createuserwithemailandpassword
+        dispatch(clearUser());
+        setError(err);
+      } finally {
+        setIsLoading(false);
+      }
     },
     [dispatch]
   );

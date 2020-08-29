@@ -2,11 +2,14 @@ import React, { useCallback } from "react";
 
 import { useForm } from "react-hook-form";
 
-import { useSignUp } from "../../hooks/signUp";
+import { useSignUpWithEmailAndPassword } from "../../hooks/auth/signUpWithEmailAndPassword";
 
-export const SignUp: React.FC = () => {
+export const SignUpWithEmailAndPassword: React.FC = () => {
   const { register, handleSubmit, errors } = useForm();
-  const { isLoading, createUserWithEmailAndPassword } = useSignUp();
+  const {
+    isLoading,
+    createUserWithEmailAndPassword,
+  } = useSignUpWithEmailAndPassword();
 
   const onSubmit = useCallback(
     (data: { email: string; password: string }) => {

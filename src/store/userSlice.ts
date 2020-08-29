@@ -13,7 +13,7 @@ export const userInitialState: UserState = {
 
 const toUserInfo = (user: firebase.User): UserState["userInfo"] => {
   return {
-    displayName: user.displayName ?? "名称未設定",
+    displayName: user.displayName ?? "未設定",
     photoURL: user.photoURL ?? "https://example.com",
   };
 };

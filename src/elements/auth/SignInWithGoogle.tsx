@@ -1,9 +1,9 @@
 import React from "react";
 
-import { useSignIn } from "../../hooks/signIn";
+import { useSignInWithGoogle } from "../../hooks/auth/signInWithGoogle";
 
 export const SignInWithGoogle: React.FC = () => {
-  const { signInWithGoogle } = useSignIn();
+  const { signInWithGoogle } = useSignInWithGoogle();
 
   return (
     <>

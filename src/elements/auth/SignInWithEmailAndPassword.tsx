@@ -2,11 +2,11 @@ import React from "react";
 
 import { useForm } from "react-hook-form";
 
-import { useSignIn } from "../../hooks/signIn";
+import { useSignInWithEmailAndPassword } from "../../hooks/auth/signInWithEmailAndPassword";
 
 export const SignInWithEmailAndPassword: React.FC = () => {
   const { register, handleSubmit, errors } = useForm();
-  const { signInWithEmailAndPassword } = useSignIn();
+  const { signInWithEmailAndPassword } = useSignInWithEmailAndPassword();
 
   const onSubmit = (data: { email: string; password: string }) => {
     signInWithEmailAndPassword(data.email, data.password);
