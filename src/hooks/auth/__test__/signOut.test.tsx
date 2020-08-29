@@ -1,12 +1,6 @@
-import { createStore, combineReducers } from "@reduxjs/toolkit";
 import { renderHook, act } from "@testing-library/react-hooks";
-import { Provider } from "react-redux";
 
 import { auth } from "../../../services/firebase/client";
-import userReducer, {
-  UserState,
-  userInitialState,
-} from "../../../store/userSlice";
 import { useSignOut } from "../signOut";
 
 jest.mock("../../../services/firebase/client", () => {
@@ -17,51 +11,24 @@ jest.mock("../../../services/firebase/client", () => {
   };
 });
 
-const getStore = ({ user }: { user?: UserState }) => {
-  return createStore(
-    combineReducers({
-      user: userReducer,
-    }),
-    {
-      user: user ?? userInitialState,
-    }
-  );
-};
-
 describe(useSignOut.name, () => {
-  let userInfo: UserState["userInfo"];
-  let store: ReturnType<typeof getStore>;
-
-  beforeEach(() => {
-    userInfo = {
-      displayName: "テスト太郎",
-      photoURL: "https://example.com/cat.jpg",
-    };
-
-    store = getStore({
-      user: { ...userInitialState, userInfo },
-    });
-  });
-
-  it("初期値でローディングはせず、エラーもない状態か", () => {
-    const { result } = renderHook(() => useSignOut(), {
-      wrapper: (props) => <Provider {...props} store={store} />,
-    });
+  it("initial value", () => {
+    const { result } = renderHook(() => useSignOut());
 
     expect(result.current.isLoading).toBe(false);
     expect(result.current.error).toBeUndefined();
   });
 
-  it("サインアウトが確実に呼び出されているか", async () => {
-    const { result } = renderHook(() => useSignOut(), {
-      wrapper: (props) => <Provider {...props} store={store} />,
-    });
+  it("when sign out", async () => {
+    const { result } = renderHook(() => useSignOut());
 
     await act(async () => {
       ((auth.signOut as unknown) as jest.Mock).mockReturnValue(() => undefined);
       await result.current.signOut();
     });
 
+    expect(result.current.isLoading).toBe(false);
+    expect(result.current.error).toBeUndefined();
     expect(auth.signOut).toHaveBeenCalledTimes(1);
   });
 });
