@@ -12,7 +12,7 @@ export const useSignOut = (): {
   isLoading: boolean;
   error?: Error;
   clearError: () => void;
-  signOut: () => void;
+  signOut: () => Promise<void>;
 } => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);

@@ -13,7 +13,7 @@ export const useSignInWithGoogle = (): {
   isLoading: boolean;
   error?: Error;
   clearError: () => void;
-  signInWithGoogle: () => void;
+  signInWithGoogle: () => Promise<void>;
 } => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);

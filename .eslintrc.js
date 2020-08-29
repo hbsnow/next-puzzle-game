@@ -8,16 +8,16 @@ module.exports = {
     "prettier",
   ],
   env: {
+    es6: true,
     browser: true,
     node: true,
-    es6: true,
   },
   parserOptions: {
     ecmaVersion: 2020,
   },
   overrides: [
     {
-      files: ["**/*.{ts,tsx}"],
+      files: ["**/*.{ts,tsx,js}"],
       extends: [
         "plugin:@typescript-eslint/recommended",
         "prettier/@typescript-eslint",
@@ -62,6 +62,15 @@ module.exports = {
         "react/prop-types": 0,
         "react-hooks/rules-of-hooks": 2,
         "react-hooks/exhaustive-deps": 2,
+      },
+    },
+    {
+      files: ["**/*.test.{ts,tsx,js}"],
+      env: {
+        jest: true,
+      },
+      rules: {
+        "react/display-name": 0,
       },
     },
   ],

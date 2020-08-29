@@ -12,7 +12,10 @@ export const useSignInWithEmailAndPassword = (): {
   isLoading: boolean;
   error?: Error;
   clearError: () => void;
-  signInWithEmailAndPassword: (email: string, password: string) => void;
+  signInWithEmailAndPassword: (
+    email: string,
+    password: string
+  ) => Promise<void>;
 } => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
