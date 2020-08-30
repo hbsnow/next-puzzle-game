@@ -1,20 +1,23 @@
 import React from "react";
 
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
-import { useSignOut } from "../../hooks/auth/signOut";
 import { RootState } from "../../store";
+import { signOut } from "../../store/userSlice";
 
 export const AppHeader: React.FC = () => {
-  const { userInfo } = useSelector((state: RootState) => state.user);
-  const { signOut } = useSignOut();
+  const { user } = useSelector((state: RootState) => state.user);
+  const dispatch = useDispatch();
+
+  const clickHandler = async () => {
+    await dispatch(signOut());
+  };
 
   return (
     <>
-      <h1>Lucky Pokemon Share</h1>
-      {userInfo?.displayName}
-      {userInfo && <img src={userInfo.photoURL} alt={userInfo.displayName} />}
-      <button onClick={signOut}>Sign Out</button>
+      <h1>Lucky Pokemon Share</h1>[{user?.displayName}]
+      {user && <img src={user.photoURL} alt={user.displayName} />}
+      <button onClick={clickHandler}>Sign Out</button>
     </>
   );
 };

@@ -1,13 +1,22 @@
 import React from "react";
 
-import { useSignInWithGoogle } from "../../hooks/auth/signInWithGoogle";
+import firebase from "firebase";
+import { useDispatch } from "react-redux";
+
+import { auth } from "../../services/firebase/client";
 
 export const SignInWithGoogle: React.FC = () => {
-  const { signInWithGoogle } = useSignInWithGoogle();
+  const dispatch = useDispatch();
+
+  const handleClick = async () => {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    await auth.signInWithRedirect(provider);
+    // await dispatch(signInWithGoogle());
+  };
 
   return (
     <>
-      <button onClick={signInWithGoogle}>Googleでサインイン</button>
+      <button onClick={handleClick}>Googleでサインイン</button>
     </>
   );
 };
