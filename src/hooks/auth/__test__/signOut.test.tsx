@@ -85,4 +85,20 @@ describe(useSignOut.name, () => {
     expect(result.current.error).not.toBeUndefined();
     expect(auth.signOut).toHaveBeenCalledTimes(1);
   });
+
+  it("clear error", async () => {
+    const { result } = renderHook(() => useSignOut(), {
+      wrapper: (props) => <Provider {...props} store={store} />,
+    });
+    mockSignOut.mockRejectedValue(new Error("error"));
+
+    await act(async () => {
+      await result.current.signOut();
+      result.current.clearError();
+    });
+
+    expect(result.current.isLoading).toBe(false);
+    expect(result.current.error).toBeUndefined();
+    expect(auth.signOut).toHaveBeenCalledTimes(1);
+  });
 });
