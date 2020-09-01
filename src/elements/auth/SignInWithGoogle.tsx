@@ -1,13 +1,23 @@
 import React from "react";
 
-import { useSignInWithGoogle } from "../../hooks/auth/signInWithGoogle";
+import firebase from "firebase/app";
+
+import { useSignInWithProvider } from "../../hooks/auth/signInWithProvider";
 
 export const SignInWithGoogle: React.FC = () => {
-  const { signInWithGoogle } = useSignInWithGoogle();
+  const { signInWithProvider: signInWithGoogle } = useSignInWithProvider(
+    new firebase.auth.GoogleAuthProvider()
+  );
 
   return (
     <>
-      <button onClick={signInWithGoogle}>Googleでサインイン</button>
+      <button
+        onClick={async () => {
+          await signInWithGoogle();
+        }}
+      >
+        Googleでサインイン
+      </button>
     </>
   );
 };

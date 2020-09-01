@@ -4,16 +4,17 @@ import firebase from "firebase/app";
 import { useDispatch } from "react-redux";
 
 import { auth } from "../../services/firebase/client";
-import { setUser, clearUser } from "../../store/userSlice";
 
 /**
- * Google でサインイン
+ * AuthProvider でサインイン
  */
-export const useSignInWithGoogle = (): {
+export const useSignInWithProvider = (
+  provider: firebase.auth.AuthProvider
+): {
   isLoading: boolean;
   error?: Error;
   clearError: () => void;
-  signInWithGoogle: () => Promise<void>;
+  signInWithProvider: () => Promise<void>;
 } => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
@@ -24,9 +25,8 @@ export const useSignInWithGoogle = (): {
     setError(undefined);
   }, []);
 
-  const signInWithGoogle = useCallback(async () => {
+  const signInWithProvider = useCallback(async () => {
     setIsLoading(true);
-    const provider = new firebase.auth.GoogleAuthProvider();
 
     try {
       await auth.signInWithPopup(provider);
@@ -35,36 +35,27 @@ export const useSignInWithGoogle = (): {
       setError(err);
       setIsLoading(false);
     }
-  }, []);
+  }, [provider]);
 
   useEffect(() => {
     let didCancel = false;
 
-    const getRedirectResult = async () => {
-      try {
-        const result = await auth.getRedirectResult();
-        if (!didCancel) {
-          if (result.user) {
-            dispatch(setUser(result.user));
-          } else {
-            // TODO: ここにくるのはどういうケースなのか
-            dispatch(clearUser());
+    if (isWaitingCallback) {
+      const getRedirectResult = async () => {
+        try {
+          await auth.getRedirectResult();
+        } catch (err) {
+          if (!didCancel) {
+            setError(err);
+          }
+        } finally {
+          if (!didCancel) {
+            setIsWaitingCallback(false);
+            setIsLoading(false);
           }
         }
-      } catch (err) {
-        if (!didCancel) {
-          dispatch(clearUser());
-          setError(err);
-        }
-      } finally {
-        if (!didCancel) {
-          setIsWaitingCallback(false);
-          setIsLoading(false);
-        }
-      }
-    };
+      };
 
-    if (isWaitingCallback) {
       getRedirectResult();
     }
 
@@ -77,6 +68,6 @@ export const useSignInWithGoogle = (): {
     isLoading,
     error,
     clearError,
-    signInWithGoogle,
+    signInWithProvider,
   };
 };

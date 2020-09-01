@@ -1,6 +1,10 @@
-import { configureStore, combineReducers } from "@reduxjs/toolkit";
+import {
+  configureStore,
+  combineReducers,
+  getDefaultMiddleware,
+} from "@reduxjs/toolkit";
 
-import user, { userInitialState } from "./userSlice";
+import user, { userInitialState, setUser } from "./userSlice";
 
 export type RootState = ReturnType<typeof rootReducer>;
 
@@ -12,6 +16,13 @@ const rootReducer = combineReducers({
   user,
 });
 
-const store = configureStore({ reducer: rootReducer });
+const store = configureStore({
+  reducer: rootReducer,
+  middleware: getDefaultMiddleware({
+    serializableCheck: {
+      ignoredActions: [setUser.type],
+    },
+  }),
+});
 
 export default store;

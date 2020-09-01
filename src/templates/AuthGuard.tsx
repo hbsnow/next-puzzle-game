@@ -13,23 +13,27 @@ export const AuthContext = React.createContext<undefined>(undefined);
 
 export const AuthGuard: React.FC = ({ children }) => {
   const dispatch = useDispatch();
-  const { userInfo } = useSelector((state: RootState) => state.user);
+  const { user } = useSelector((state: RootState) => state.user);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    auth.onAuthStateChanged((user) => {
+    const unsubscribe = auth.onAuthStateChanged((nextUser) => {
       setIsLoading(false);
-      if (user) {
-        dispatch(setUser(user));
+      if (nextUser) {
+        dispatch(setUser(nextUser));
       } else {
         dispatch(clearUser());
       }
     });
+
+    return () => {
+      unsubscribe();
+    };
   }, [dispatch]);
 
   return (
     <>
-      {userInfo ? <AppTemplate>{children}</AppTemplate> : <SignInTemplate />}
+      {user ? <AppTemplate>{children}</AppTemplate> : <SignInTemplate />}
       <Loader isLoading={isLoading} />
     </>
   );

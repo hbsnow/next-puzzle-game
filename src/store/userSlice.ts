@@ -1,17 +1,17 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export type UserState = {
-  userInfo?: {
+  user?: {
     displayName: NonNullable<firebase.UserInfo["displayName"]>;
     photoURL: NonNullable<firebase.UserInfo["photoURL"]>;
   };
 };
 
 export const userInitialState: UserState = {
-  userInfo: undefined,
+  user: undefined,
 };
 
-const toUserInfo = (user: firebase.User): UserState["userInfo"] => {
+const toUser = (user: firebase.User): UserState["user"] => {
   return {
     displayName: user.displayName ?? "未設定",
     photoURL: user.photoURL ?? "https://example.com",
@@ -25,13 +25,13 @@ const slice = createSlice({
     setUser: (state, action: PayloadAction<firebase.User>) => {
       return {
         ...state,
-        userInfo: toUserInfo(action.payload),
+        user: toUser(action.payload),
       };
     },
     clearUser: (state) => {
       return {
         ...state,
-        userInfo: undefined,
+        user: undefined,
       };
     },
   },
