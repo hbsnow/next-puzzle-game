@@ -11,14 +11,12 @@ import userReducer, {
 } from "../../store/userSlice";
 import { useSignInWithProvider } from "./signInWithProvider";
 
-jest.mock("../../services/firebase/client", () => {
-  return {
-    auth: {
-      signInWithPopup: jest.fn(),
-      getRedirectResult: jest.fn(),
-    },
-  };
-});
+jest.mock("../../services/firebase/client", () => ({
+  auth: {
+    signInWithPopup: jest.fn(),
+    getRedirectResult: jest.fn(),
+  },
+}));
 const mockSignInWithPopup = mocked(auth.signInWithPopup);
 const mockGetRedirectResult = mocked(auth.getRedirectResult);
 
