@@ -2,27 +2,23 @@ import { createStore, combineReducers } from "@reduxjs/toolkit";
 import { renderHook, act } from "@testing-library/react-hooks";
 import firebase from "firebase";
 import { Provider } from "react-redux";
-import { mocked } from "ts-jest/utils";
 
-import { auth } from "../../services/firebase/client";
 import userReducer, {
   UserState,
   userInitialState,
 } from "../../store/userSlice";
 import { useSignInWithProvider } from "./signInWithProvider";
 
-jest.mock("../../services/firebase/client", () => ({
-  auth: {
-    signInWithPopup: jest.fn(),
-    getRedirectResult: jest.fn(),
-  },
-}));
-const mockSignInWithPopup = mocked(auth.signInWithPopup);
-const mockGetRedirectResult = mocked(auth.getRedirectResult);
+const auth = ({
+  signInWithPopup: () => undefined,
+  getRedirectResult: () => undefined,
+} as unknown) as firebase.auth.Auth;
+const authProvider = {} as firebase.auth.AuthProvider;
 
-const provider = {} as firebase.auth.AuthProvider;
+const spySignInWithPopup = jest.spyOn(auth, "signInWithPopup");
+const spyGetRedirectResult = jest.spyOn(auth, "getRedirectResult");
 
-const getStore = ({ user }: { user?: UserState }) => {
+const getStore = (user?: UserState) => {
   return createStore(
     combineReducers({
       user: userReducer,
@@ -37,27 +33,35 @@ describe(useSignInWithProvider.name, () => {
   let store: ReturnType<typeof getStore>;
 
   beforeEach(() => {
-    store = getStore({
-      user: { ...userInitialState },
-    });
-
-    mockSignInWithPopup.mockReset();
-    mockGetRedirectResult.mockReset();
+    store = getStore();
+    spySignInWithPopup.mockResolvedValue({} as firebase.auth.UserCredential);
+    spyGetRedirectResult.mockResolvedValue({} as firebase.auth.UserCredential);
   });
 
-  it("initial value", () => {
-    const { result } = renderHook(() => useSignInWithProvider(provider), {
-      wrapper: (props) => <Provider {...props} store={store} />,
-    });
+  afterEach(() => {
+    spySignInWithPopup.mockClear();
+    spyGetRedirectResult.mockClear();
+  });
+
+  test("initial value", () => {
+    const { result } = renderHook(
+      () => useSignInWithProvider(auth, authProvider),
+      {
+        wrapper: (props) => <Provider {...props} store={store} />,
+      }
+    );
 
     expect(result.current.isLoading).toBe(false);
     expect(result.current.error).toBeUndefined();
   });
 
-  it("sign in", async () => {
-    const { result } = renderHook(() => useSignInWithProvider(provider), {
-      wrapper: (props) => <Provider {...props} store={store} />,
-    });
+  test("sign in", async () => {
+    const { result } = renderHook(
+      () => useSignInWithProvider(auth, authProvider),
+      {
+        wrapper: (props) => <Provider {...props} store={store} />,
+      }
+    );
 
     await act(async () => {
       await result.current.signInWithProvider();
@@ -65,15 +69,18 @@ describe(useSignInWithProvider.name, () => {
 
     expect(result.current.isLoading).toBe(false);
     expect(result.current.error).toBeUndefined();
-    expect(auth.signInWithPopup).toHaveBeenCalledTimes(1);
-    expect(auth.getRedirectResult).toHaveBeenCalledTimes(1);
+    expect(spySignInWithPopup).toHaveBeenCalledTimes(1);
+    expect(spyGetRedirectResult).toHaveBeenCalledTimes(1);
   });
 
-  it("error when signInWithPopup", async () => {
-    mockSignInWithPopup.mockRejectedValue(new Error());
-    const { result } = renderHook(() => useSignInWithProvider(provider), {
-      wrapper: (props) => <Provider {...props} store={store} />,
-    });
+  test("error when signInWithPopup", async () => {
+    spySignInWithPopup.mockRejectedValue(new Error());
+    const { result } = renderHook(
+      () => useSignInWithProvider(auth, authProvider),
+      {
+        wrapper: (props) => <Provider {...props} store={store} />,
+      }
+    );
 
     await act(async () => {
       await result.current.signInWithProvider();
@@ -85,11 +92,14 @@ describe(useSignInWithProvider.name, () => {
     expect(auth.getRedirectResult).toHaveBeenCalledTimes(0);
   });
 
-  it("error when getRedirectResult", async () => {
-    mockGetRedirectResult.mockRejectedValue(new Error());
-    const { result } = renderHook(() => useSignInWithProvider(provider), {
-      wrapper: (props) => <Provider {...props} store={store} />,
-    });
+  test("error when getRedirectResult", async () => {
+    spyGetRedirectResult.mockRejectedValue(new Error());
+    const { result } = renderHook(
+      () => useSignInWithProvider(auth, authProvider),
+      {
+        wrapper: (props) => <Provider {...props} store={store} />,
+      }
+    );
 
     await act(async () => {
       await result.current.signInWithProvider();

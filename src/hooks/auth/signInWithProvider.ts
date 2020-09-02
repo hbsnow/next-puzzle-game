@@ -3,12 +3,11 @@ import { useCallback, useState, useEffect } from "react";
 import firebase from "firebase/app";
 import { useDispatch } from "react-redux";
 
-import { auth } from "../../services/firebase/client";
-
 /**
  * AuthProvider でサインイン
  */
 export const useSignInWithProvider = (
+  auth: firebase.auth.Auth,
   provider: firebase.auth.AuthProvider
 ): {
   isLoading: boolean;
@@ -35,7 +34,7 @@ export const useSignInWithProvider = (
       setError(err);
       setIsLoading(false);
     }
-  }, [provider]);
+  }, [auth, provider]);
 
   useEffect(() => {
     let didCancel = false;
@@ -62,7 +61,7 @@ export const useSignInWithProvider = (
     return () => {
       didCancel = true;
     };
-  }, [dispatch, isWaitingCallback]);
+  }, [auth, dispatch, isWaitingCallback]);
 
   return {
     isLoading,
