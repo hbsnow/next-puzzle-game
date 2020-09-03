@@ -43,7 +43,7 @@ describe(useSignInWithProvider.name, () => {
     spyGetRedirectResult.mockClear();
   });
 
-  test("initial value", () => {
+  test("initial state", () => {
     const { result } = renderHook(
       () => useSignInWithProvider(auth, authProvider),
       {
