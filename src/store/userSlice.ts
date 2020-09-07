@@ -1,9 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
+import { firestore } from "../services/firebase/client";
+
 export type UserState = {
   user?: {
-    displayName: NonNullable<firebase.UserInfo["displayName"]>;
-    photoURL: NonNullable<firebase.UserInfo["photoURL"]>;
+    userId: string;
+    createdAt: firebase.firestore.FieldValue;
+    updatedAt: firebase.firestore.FieldValue;
   };
 };
 
@@ -11,21 +14,22 @@ export const userInitialState: UserState = {
   user: undefined,
 };
 
-const toUser = (user: firebase.User): UserState["user"] => {
-  return {
-    displayName: user.displayName ?? "未設定",
-    photoURL: user.photoURL ?? "https://example.com",
-  };
+export const getUserRef = (
+  uid: string
+): firebase.firestore.DocumentReference<UserState["user"]> => {
+  return firestore.doc(
+    `public/v1/users/${uid}`
+  ) as firebase.firestore.DocumentReference<UserState["user"]>;
 };
 
 const slice = createSlice({
   name: "user",
   initialState: userInitialState,
   reducers: {
-    setUser: (state, action: PayloadAction<firebase.User>) => {
+    setUser: (state, action: PayloadAction<UserState["user"]>) => {
       return {
         ...state,
-        user: toUser(action.payload),
+        user: action.payload,
       };
     },
     clearUser: (state) => {
