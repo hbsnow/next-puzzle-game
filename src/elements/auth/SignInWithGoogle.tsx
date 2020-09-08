@@ -2,7 +2,7 @@ import React from "react";
 
 import firebase from "firebase/app";
 
-import { useSignInWithProvider } from "../../hooks/auth/signInWithProvider";
+import { useSignInWithProvider } from "../../hooks/signInWithProvider";
 import { auth } from "../../services/firebase/client";
 
 export const SignInWithGoogle: React.FC = () => {

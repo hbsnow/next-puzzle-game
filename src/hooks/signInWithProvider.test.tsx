@@ -3,10 +3,7 @@ import { renderHook, act } from "@testing-library/react-hooks";
 import firebase from "firebase";
 import { Provider } from "react-redux";
 
-import userReducer, {
-  UserState,
-  userInitialState,
-} from "../../store/userSlice";
+import userReducer, { UserState, userInitialState } from "../store/userSlice";
 import { useSignInWithProvider } from "./signInWithProvider";
 
 const auth = ({

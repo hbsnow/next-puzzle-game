@@ -2,8 +2,8 @@ import { useCallback, useState } from "react";
 
 import { useDispatch } from "react-redux";
 
-import { auth } from "../../services/firebase/client";
-import { clearUser, setUser } from "../../store/userSlice";
+import { auth } from "../services/firebase/client";
+import { clearUser, setUser } from "../store/userSlice";
 
 /**
  * アカウント作成

@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 
 import { useForm } from "react-hook-form";
 
-import { useSignUpWithEmailAndPassword } from "../../hooks/auth/signUpWithEmailAndPassword";
+import { useSignUpWithEmailAndPassword } from "../../hooks/signUpWithEmailAndPassword";
 
 export const SignUpWithEmailAndPassword: React.FC = () => {
   const { register, handleSubmit, errors } = useForm();
