@@ -3,14 +3,19 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { RootState } from "../../store";
-import { PokemonType, getAllPokemons } from "../../store/pokemonsSlice";
+import {
+  PokemonType,
+  getAllPokemons,
+  pokemonArea,
+  exceptPokemonArea,
+} from "../../store/pokemonsSlice";
 import { CategorizedByArea } from "./CategorizedByArea";
 
 export const PokemonBox: React.FC = () => {
-  const [areas, setAreas] = useState<PokemonType["area"]>([]);
+  const [areas, setAreas] = useState<PokemonType["area"][]>([]);
   const clickTab = (event: React.SyntheticEvent<HTMLButtonElement>) => {
     const element = event.currentTarget;
-    const value = element.value as PokemonType["area"][number];
+    const value = parseInt(element.value);
 
     if (!areas.some((area) => area === value)) {
       areas.push(value);
@@ -26,7 +31,6 @@ export const PokemonBox: React.FC = () => {
   const { pokemons } = useSelector((state: RootState) => state.pokemons);
 
   useEffect(() => {
-    console.log(pokemons);
     if (pokemons.length === 0) {
       dispatch(getAllPokemons());
     }
@@ -35,39 +39,18 @@ export const PokemonBox: React.FC = () => {
   return (
     <>
       <div>
-        <button
-          onClick={() => {
-            console.log(pokemons);
-          }}
-        >
-          button
-        </button>
-      </div>
-      <div>
         <div>
-          <button onClick={clickTab} value="kanto">
-            カントー 001-151
-          </button>
-          <div></div>
-          <button onClick={clickTab} value="johto">
-            ジョウト 152-251
-          </button>
-          <div></div>
-          <button onClick={clickTab} value="hoenn">
-            ホウエン 252-386
-          </button>
-          <div></div>
-          <button onClick={clickTab} value="sinnoh">
-            シンオウ 387-491
-          </button>
-          <div></div>
-          <button onClick={clickTab} value="unova">
-            イッシュ 494-649
-          </button>
-          <div></div>
-          <button onClick={clickTab} value="galar">
-            ガラル 862-863
-          </button>
+          {pokemonArea.map((area, i) => {
+            if (exceptPokemonArea.some((expectArea) => expectArea === area)) {
+              return;
+            }
+
+            return (
+              <button key={area} onClick={clickTab} value={i}>
+                {area}
+              </button>
+            );
+          })}
         </div>
       </div>
 

@@ -3,20 +3,22 @@ import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { firestore } from "../services/firebase/client";
 
 export const pokemonArea = [
-  "kanto",
-  "johto",
-  "hoenn",
-  "sinnoh",
-  "unova",
-  "kalos",
-  "alola",
-  "galar",
+  "カントー",
+  "ジョウト",
+  "ホウエン",
+  "シンオウ",
+  "イッシュ",
+  "カロス",
+  "アローラ",
+  "ガラル",
 ] as const;
+
+export const exceptPokemonArea = [pokemonArea[5]] as const;
 
 export type PokemonType = {
   no: number;
   name: string;
-  area: typeof pokemonArea[number][];
+  area: number;
 };
 
 export type PokemonsState = {
@@ -30,14 +32,14 @@ export const pokemonsInitialState: PokemonsState = {
 export const getAllPokemons = createAsyncThunk(
   "pokemons/getAllPokemons",
   async () => {
-    const collections = firestore.collection(`public/v1/pokemons`);
-    const querySnapshot = await collections.get();
-    const pokemons: PokemonType[] = [];
-    querySnapshot.forEach((doc) => {
-      pokemons.push(doc.data() as PokemonType);
-    });
+    const doc = firestore.doc(`public/v1/master/pokemons`);
+    const querySnapshot = await doc.get();
 
-    return pokemons;
+    if (querySnapshot.exists) {
+      return querySnapshot.data() as PokemonType[];
+    }
+
+    return [];
   }
 );
 

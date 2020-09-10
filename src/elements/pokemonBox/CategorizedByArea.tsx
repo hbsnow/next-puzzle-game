@@ -3,7 +3,7 @@ import React from "react";
 import { PokemonType } from "../../store/pokemonsSlice";
 
 type Props = {
-  areas: PokemonType["area"];
+  areas: PokemonType["area"][];
 };
 
 export const CategorizedByArea: React.FC<Props> = ({ areas }) => {
