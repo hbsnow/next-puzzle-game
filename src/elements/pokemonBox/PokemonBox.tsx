@@ -1,127 +1,77 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
-import { TabList, TabListItem, TabPanel } from "../../components/tab/TabParts";
-import { useTabs } from "../../hooks/tab";
+import { useDispatch, useSelector } from "react-redux";
+
+import { RootState } from "../../store";
+import { PokemonType, getAllPokemons } from "../../store/pokemonsSlice";
+import { CategorizedByArea } from "./CategorizedByArea";
 
 export const PokemonBox: React.FC = () => {
-  const { clickTab, activeIndex } = useTabs();
+  const [areas, setAreas] = useState<PokemonType["area"]>([]);
+  const clickTab = (event: React.SyntheticEvent<HTMLButtonElement>) => {
+    const element = event.currentTarget;
+    const value = element.value as PokemonType["area"][number];
+
+    if (!areas.some((area) => area === value)) {
+      areas.push(value);
+    } else {
+      const targetIndex = areas.findIndex((area) => area === value);
+      areas.splice(targetIndex, 1);
+    }
+
+    setAreas([...areas]);
+  };
+
+  const dispatch = useDispatch();
+  const { pokemons } = useSelector((state: RootState) => state.pokemons);
+
+  useEffect(() => {
+    console.log(pokemons);
+    if (pokemons.length === 0) {
+      dispatch(getAllPokemons());
+    }
+  }, [dispatch, pokemons]);
 
   return (
     <>
-      <TabList>
-        <TabListItem>
-          <button
-            role="tab"
-            aria-controls={name}
-            aria-selected={activeIndex === 0}
-            onClick={clickTab}
-            value={0}
-          >
-            カントー
+      <div>
+        <button
+          onClick={() => {
+            console.log(pokemons);
+          }}
+        >
+          button
+        </button>
+      </div>
+      <div>
+        <div>
+          <button onClick={clickTab} value="kanto">
+            カントー 001-151
           </button>
-        </TabListItem>
-        <TabListItem>
-          <button
-            role="tab"
-            aria-controls={name}
-            aria-selected={activeIndex === 1}
-            onClick={clickTab}
-            value={1}
-          >
-            ジョウト
+          <div></div>
+          <button onClick={clickTab} value="johto">
+            ジョウト 152-251
           </button>
-        </TabListItem>
-        <TabListItem>
-          <button
-            role="tab"
-            aria-controls={name}
-            aria-selected={activeIndex === 2}
-            onClick={clickTab}
-            value={2}
-          >
-            ホウエン
+          <div></div>
+          <button onClick={clickTab} value="hoenn">
+            ホウエン 252-386
           </button>
-        </TabListItem>
-        <TabListItem>
-          <button
-            role="tab"
-            aria-controls={name}
-            aria-selected={activeIndex === 3}
-            onClick={clickTab}
-            value={3}
-          >
-            シンオウ
+          <div></div>
+          <button onClick={clickTab} value="sinnoh">
+            シンオウ 387-491
           </button>
-        </TabListItem>
-        <TabListItem>
-          <button
-            role="tab"
-            aria-controls={name}
-            aria-selected={activeIndex === 4}
-            onClick={clickTab}
-            value={4}
-          >
-            イッシュ
+          <div></div>
+          <button onClick={clickTab} value="unova">
+            イッシュ 494-649
           </button>
-        </TabListItem>
-        <TabListItem>
-          <button
-            role="tab"
-            aria-controls={name}
-            aria-selected={activeIndex === 5}
-            onClick={clickTab}
-            value={5}
-          >
-            カロス
+          <div></div>
+          <button onClick={clickTab} value="galar">
+            ガラル 862-863
           </button>
-        </TabListItem>
-        <TabListItem>
-          <button
-            role="tab"
-            aria-controls={name}
-            aria-selected={activeIndex === 6}
-            onClick={clickTab}
-            value={6}
-          >
-            アローラ
-          </button>
-        </TabListItem>
-        <TabListItem>
-          <button
-            role="tab"
-            aria-controls={name}
-            aria-selected={activeIndex === 7}
-            onClick={clickTab}
-            value={7}
-          >
-            ガラル
-          </button>
-        </TabListItem>
-      </TabList>
-      <TabPanel name="TabListItem0" hidden={activeIndex !== 0}>
-        カントー
-      </TabPanel>
-      <TabPanel name="TabListItem1" hidden={activeIndex !== 1}>
-        ジョウト
-      </TabPanel>
-      <TabPanel name="TabListItem2" hidden={activeIndex !== 2}>
-        ホウエン
-      </TabPanel>
-      <TabPanel name="TabListItem2" hidden={activeIndex !== 3}>
-        シンオウ
-      </TabPanel>
-      <TabPanel name="TabListItem2" hidden={activeIndex !== 4}>
-        イッシュ
-      </TabPanel>
-      <TabPanel name="TabListItem2" hidden={activeIndex !== 5}>
-        カロス
-      </TabPanel>
-      <TabPanel name="TabListItem2" hidden={activeIndex !== 6}>
-        アローラ
-      </TabPanel>
-      <TabPanel name="TabListItem2" hidden={activeIndex !== 7}>
-        ガラル
-      </TabPanel>
+        </div>
+      </div>
+
+      <CategorizedByArea areas={areas} />
     </>
   );
 };

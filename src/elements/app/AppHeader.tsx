@@ -11,8 +11,7 @@ export const AppHeader: React.FC = () => {
   return (
     <>
       <h1>Lucky Pokemon Share</h1>
-      <div>{user?.displayName}</div>
-      <div>{user?.photoURL}</div>
+      <div>{user?.userId}</div>
       <Link href="/signout">
         <a>Sign Out</a>
       </Link>

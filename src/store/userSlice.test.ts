@@ -1,6 +1,11 @@
 import { AnyAction } from "@reduxjs/toolkit";
 
-import reducer, { userInitialState, clearUser, setUser } from "./userSlice";
+import reducer, {
+  userInitialState,
+  clearUser,
+  setUser,
+  UserState,
+} from "./userSlice";
 
 describe("state", () => {
   it("initial state", function () {
@@ -13,17 +18,13 @@ describe("state", () => {
 describe("action", () => {
   describe("setUser()", () => {
     const user = {
-      displayName: "John Doe",
-      email: "dummy@example.com",
-      photoURL: "http://example.com",
-      uid: "DUMMY",
-    } as firebase.User;
+      userId: "userId",
+    } as UserState["user"];
 
     test("inserted user", () => {
       expect(reducer(userInitialState, setUser(user))).toEqual({
         user: {
-          displayName: "John Doe",
-          photoURL: "http://example.com",
+          userId: "userId",
         },
       });
     });

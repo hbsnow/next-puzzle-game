@@ -4,24 +4,25 @@ import {
   getDefaultMiddleware,
 } from "@reduxjs/toolkit";
 
-import user, { userInitialState, setUser } from "./userSlice";
+import pokemons, { pokemonsInitialState } from "./pokemonsSlice";
+import user, { userInitialState } from "./userSlice";
 
 export type RootState = ReturnType<typeof rootReducer>;
 
 export const rootInitialState: RootState = {
   user: userInitialState,
+  pokemons: pokemonsInitialState,
 };
 
 const rootReducer = combineReducers({
   user,
+  pokemons,
 });
 
 const store = configureStore({
   reducer: rootReducer,
   middleware: getDefaultMiddleware({
-    serializableCheck: {
-      ignoredActions: [setUser.type],
-    },
+    serializableCheck: false,
   }),
 });
 
