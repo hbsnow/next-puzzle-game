@@ -22,11 +22,13 @@ export type PokemonType = {
 };
 
 export type PokemonsState = {
-  pokemons: PokemonType[];
+  master?: {
+    default: PokemonType[];
+  };
 };
 
 export const pokemonsInitialState: PokemonsState = {
-  pokemons: [],
+  master: undefined,
 };
 
 export const getAllPokemons = createAsyncThunk(
@@ -35,11 +37,11 @@ export const getAllPokemons = createAsyncThunk(
     const doc = firestore.doc(`public/v1/master/pokemons`);
     const querySnapshot = await doc.get();
 
-    if (querySnapshot.exists) {
-      return querySnapshot.data() as PokemonType[];
+    if (!querySnapshot.exists) {
+      return undefined;
     }
 
-    return [];
+    return querySnapshot.data() as PokemonsState["master"];
   }
 );
 
@@ -47,19 +49,18 @@ const slice = createSlice({
   name: "pokemons",
   initialState: pokemonsInitialState,
   reducers: {
-    setPokemons: (state, action: PayloadAction<PokemonsState["pokemons"]>) => {
+    setPokemons: (state, action: PayloadAction<PokemonsState["master"]>) => {
       return {
         ...state,
-        pokemons: action.payload,
+        master: action.payload,
       };
     },
   },
   extraReducers: (builder) => {
     builder.addCase(getAllPokemons.fulfilled, (state, action) => {
-      console.log(action.payload);
       return {
         ...state,
-        pokemons: action.payload,
+        master: action.payload,
       };
     });
   },
