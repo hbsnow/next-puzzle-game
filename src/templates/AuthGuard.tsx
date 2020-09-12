@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Loader from "../components/loader/Loader";
 import { auth } from "../services/firebase/client";
 import { RootState } from "../store";
-import { setUser, clearUser, getUserRef, UserState } from "../store/userSlice";
+import { setUser, clearUser, getUserDoc, UserState } from "../store/userSlice";
 import { AppTemplate } from "./AppTemplate";
 import { SignInTemplate } from "./SignInTemplate";
 
@@ -15,21 +15,22 @@ export const AuthContext = React.createContext<undefined>(undefined);
 const mightRegist = async (
   uid: firebase.User["uid"]
 ): Promise<firestore.DocumentSnapshot<UserState["user"]>> => {
-  const userRef = getUserRef(uid);
-  const snapshot = await userRef.get();
+  const userDoc = getUserDoc(uid);
+  const snapshot = await userDoc.get();
 
   if (snapshot.exists) {
     return snapshot;
   }
 
   const timestamp = firestore.FieldValue.serverTimestamp();
-  await userRef.set({
+  await userDoc.set({
     userId: uid,
     createdAt: timestamp,
     updatedAt: timestamp,
+    // pokemonsのsetもする
   });
 
-  return userRef.get();
+  return userDoc.get();
 };
 
 export const AuthGuard: React.FC = ({ children }) => {

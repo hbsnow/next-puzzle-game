@@ -15,20 +15,26 @@ export const pokemonArea = [
 
 export const exceptPokemonArea = [pokemonArea[5]] as const;
 
+type categorizedKeyType = "default";
+
 export type PokemonType = {
   no: number;
   name: string;
   area: number;
 };
 
+export type CategorizedPokemonType<T> = {
+  [key in categorizedKeyType]: T;
+};
+
 export type PokemonsState = {
-  master?: {
-    default: PokemonType[];
-  };
+  master?: CategorizedPokemonType<PokemonType[]>;
+  changedPokemons?: CategorizedPokemonType<{ [key: string]: number }>;
 };
 
 export const pokemonsInitialState: PokemonsState = {
   master: undefined,
+  changedPokemons: undefined,
 };
 
 export const getAllPokemons = createAsyncThunk(
@@ -49,11 +55,23 @@ const slice = createSlice({
   name: "pokemons",
   initialState: pokemonsInitialState,
   reducers: {
-    setPokemons: (state, action: PayloadAction<PokemonsState["master"]>) => {
-      return {
-        ...state,
-        master: action.payload,
-      };
+    setChangedPokemons: (
+      state,
+      action: PayloadAction<{
+        key: categorizedKeyType;
+        changedPokemons: { [key: string]: number };
+      }>
+    ) => {
+      if (state.changedPokemons?.[action.payload.key]) {
+        state.changedPokemons[action.payload.key] = {
+          ...state.changedPokemons[action.payload.key],
+          ...action.payload.changedPokemons,
+        };
+      } else {
+        state.changedPokemons = {
+          [action.payload.key]: action.payload.changedPokemons,
+        };
+      }
     },
   },
   extraReducers: (builder) => {
@@ -66,6 +84,6 @@ const slice = createSlice({
   },
 });
 
-export const { setPokemons } = slice.actions;
+export const { setChangedPokemons } = slice.actions;
 
 export default slice.reducer;
