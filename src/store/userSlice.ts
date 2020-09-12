@@ -7,7 +7,7 @@ import { CategorizedPokemonType } from "./pokemonsSlice";
 export type UserState = {
   user?: {
     userId: string;
-    pokemons?: CategorizedPokemonType<{ [key: string]: number }>;
+    pokemons: CategorizedPokemonType<{ [key: string]: number }>;
     createdAt: firebase.firestore.FieldValue;
     updatedAt: firebase.firestore.FieldValue;
   };
@@ -25,19 +25,22 @@ export const getUserDoc = (
   ) as firebase.firestore.DocumentReference<UserState["user"]>;
 };
 
-// export const getPokemons = createAsyncThunk(
-//   "user/getPokemons",
-//   async (uid: string) => {
-//     const doc = getUserDoc(uid);
-//     const querySnapshot = await doc.get(); // 全部とってきちゃってる
+export const updatePokemons = createAsyncThunk(
+  "user/getPokemons",
+  async ({
+    uid,
+    updateData,
+  }: {
+    uid: string;
+    updateData: firebase.firestore.UpdateData;
+  }) => {
+    console.log({ uid, updateData });
+    const doc = getUserDoc(uid);
+    await doc.update(updateData);
 
-//     if (!querySnapshot.exists) {
-//       return undefined;
-//     }
-
-//     return querySnapshot.data() as UserState["pokemons"];
-//   }
-// );
+    // return querySnapshot.data() as UserState["pokemons"];
+  }
+);
 
 const slice = createSlice({
   name: "user",

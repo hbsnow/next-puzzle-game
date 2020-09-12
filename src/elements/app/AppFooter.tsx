@@ -1,29 +1,37 @@
 import React from "react";
 
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { RootState } from "../../store";
+import { updatePokemons } from "../../store/userSlice";
 
 export const AppFooter: React.FC = () => {
+  const dispatch = useDispatch();
+
   const { user } = useSelector((state: RootState) => state.user);
   const { changedPokemons } = useSelector((state: RootState) => state.pokemons);
 
   const clickHandler = () => {
     if (!changedPokemons || !user?.pokemons) {
+      console.log(changedPokemons);
       return;
     }
+    console.log(user.pokemons, changedPokemons);
 
-    const filtered = Object.keys(changedPokemons.default).filter(
-      (pokemonNumber) => {
-        return (
-          user.pokemons?.default?.[pokemonNumber] !== undefined &&
-          user.pokemons.default[pokemonNumber] !==
-            changedPokemons.default[pokemonNumber]
-        );
-      }
+    dispatch(
+      updatePokemons({
+        uid: user.userId,
+        updateData: {
+          pokemons: {
+            ...user.pokemons,
+            default: {
+              ...user.pokemons.default,
+              ...changedPokemons.default,
+            },
+          },
+        },
+      })
     );
-
-    console.log(filtered);
   };
 
   return (

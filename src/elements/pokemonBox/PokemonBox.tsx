@@ -15,7 +15,7 @@ import { UserState } from "../../store/userSlice";
 export const PokemonBox: React.FC = () => {
   const [selectedAreas, setSelectedAreas] = useState<PokemonType["area"][]>([]);
   const [pokemons, setPokemons] = useState<
-    Required<UserState>["user"]["pokemons"]
+    Required<UserState>["user"]["pokemons"] | undefined
   >(undefined);
 
   const clickTab = (event: React.SyntheticEvent<HTMLButtonElement>) => {
