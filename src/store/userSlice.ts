@@ -1,4 +1,9 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import {
+  createAsyncThunk,
+  createSlice,
+  PayloadAction,
+  SerializedError,
+} from "@reduxjs/toolkit";
 import firebase from "firebase";
 
 import { firestore } from "../services/firebase/client";
@@ -11,10 +16,14 @@ export type UserState = {
     createdAt: firebase.firestore.FieldValue;
     updatedAt: firebase.firestore.FieldValue;
   };
+  updatePokemonsLoading: boolean;
+  updatePokemonsError?: SerializedError;
 };
 
 export const userInitialState: UserState = {
   user: undefined,
+  updatePokemonsLoading: false,
+  updatePokemonsError: undefined,
 };
 
 export const getUserDoc = (
@@ -34,11 +43,8 @@ export const updatePokemons = createAsyncThunk(
     uid: string;
     updateData: firebase.firestore.UpdateData;
   }) => {
-    console.log({ uid, updateData });
     const doc = getUserDoc(uid);
     await doc.update(updateData);
-
-    // return querySnapshot.data() as UserState["pokemons"];
   }
 );
 
@@ -47,27 +53,24 @@ const slice = createSlice({
   initialState: userInitialState,
   reducers: {
     setUser: (state, action: PayloadAction<UserState["user"]>) => {
-      return {
-        ...state,
-        user: action.payload,
-      };
+      state.user = action.payload;
     },
     clearUser: (state) => {
-      return {
-        ...state,
-        user: undefined,
-      };
+      state.user = undefined;
     },
   },
-  // extraReducers: (builder) => {
-  //   builder.addCase(getPokemons.fulfilled, (state, action) => {
-  //     console.log(action.payload);
-  //     return {
-  //       ...state,
-  //       pokemons: action.payload,
-  //     };
-  //   });
-  // },
+  extraReducers: (builder) => {
+    builder.addCase(updatePokemons.pending, (state) => {
+      state.updatePokemonsLoading = true;
+    });
+    builder.addCase(updatePokemons.fulfilled, (state) => {
+      state.updatePokemonsLoading = false;
+    });
+    builder.addCase(updatePokemons.rejected, (state, action) => {
+      state.updatePokemonsLoading = false;
+      state.updatePokemonsError = action.error;
+    });
+  },
 });
 
 export const { setUser, clearUser } = slice.actions;

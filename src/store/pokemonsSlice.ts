@@ -15,7 +15,8 @@ export const pokemonArea = [
 
 export const exceptPokemonArea = [pokemonArea[5]] as const;
 
-type categorizedKeyType = "default";
+export const categorizedKey = ["default"] as const;
+type categorizedKeyType = typeof categorizedKey[number];
 
 export type PokemonType = {
   no: number;

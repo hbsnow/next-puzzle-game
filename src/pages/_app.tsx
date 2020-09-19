@@ -6,12 +6,26 @@ import { NextPage } from "next";
 import { AppProps } from "next/app";
 import Head from "next/head";
 import { Provider } from "react-redux";
+import { createGlobalStyle } from "styled-components";
 
 import store from "../store";
+
+const GlobalStyle = createGlobalStyle`
+  *, ::after, ::before {
+    box-sizing: border-box;
+  }
+
+  body {
+    background-color: #ddd;
+    margin: 0;
+    padding: 0;
+  }
+`;
 
 const App: NextPage<AppProps> = ({ Component, pageProps }) => {
   return (
     <>
+      <GlobalStyle />
       <Head>
         <meta
           name="viewport"
