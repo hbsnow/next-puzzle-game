@@ -1,27 +1,18 @@
 import React, { useCallback, useState } from "react";
 
-import firebase from "firebase/app";
-import { motion } from "framer-motion";
-
 import { Button } from "../components/button/Button";
-import { SignInWithEmailAndPassword } from "../elements/auth/SignInWithEmailAndPassword";
 import { SignUpWithEmailAndPassword } from "../elements/auth/SignUpWithEmailAndPassword";
-import { useSignInWithProvider } from "../hooks/signInWithProvider";
-import { auth } from "../services/firebase/client";
+import { AuthBox } from "../elements/authBox/AuthBox";
+import { AuthBoxSignIn } from "../elements/authBox/AuthBoxSignIn";
+import { AuthBoxTitle } from "../elements/authBox/authBoxTitle";
 import {
   authLayoutContentVariants,
-  StyledAuthBox,
   StyledAuthLayout,
   StyledAuthLayoutContent,
 } from "./AuthTemplate.styles";
 
 export const AuthTemplate: React.FC = () => {
   const [state, setState] = useState<"signIn" | "signUp">("signIn");
-
-  const {
-    signInWithProvider: signInWithGoogle,
-    isLoading,
-  } = useSignInWithProvider(auth, new firebase.auth.GoogleAuthProvider());
 
   const handleClickSignUp = useCallback(() => {
     setState("signUp");
@@ -34,44 +25,32 @@ export const AuthTemplate: React.FC = () => {
   return (
     <StyledAuthLayout>
       <StyledAuthLayoutContent
-        animate={state === "signIn" ? "signIn" : "hidden"}
+        animate={state === "signIn" ? "showSignIn" : "hiddenSignIn"}
         variants={authLayoutContentVariants}
       >
-        <StyledAuthBox>
-          <SignInWithEmailAndPassword></SignInWithEmailAndPassword>
-
-          <div>
-            <Button
-              onClick={async () => {
-                await signInWithGoogle();
-              }}
-              fill={true}
-            >
-              Googleでログイン
-            </Button>
-          </div>
-
-          <div>
-            <Button onClick={handleClickSignUp}>新規アカウント作成</Button>
-          </div>
-
-          {isLoading && <div>Loading</div>}
-        </StyledAuthBox>
+        <AuthBox>
+          <AuthBoxTitle title="ログイン" />
+          <AuthBoxSignIn switchSignUp={handleClickSignUp} />
+        </AuthBox>
       </StyledAuthLayoutContent>
 
       <StyledAuthLayoutContent
-        animate={state === "signUp" ? "signUp" : "hidden"}
+        animate={state === "signUp" ? "showSignUp" : "hiddenSignUp"}
         variants={authLayoutContentVariants}
       >
-        <StyledAuthBox>
+        <AuthBox>
+          <AuthBoxTitle title="新規アカウント作成" />
+
           <SignUpWithEmailAndPassword />
 
-          <div>
-            <Button onClick={handleClickSignIn}>ログイン</Button>
-          </div>
+          <hr />
 
-          {isLoading && <div>Loading</div>}
-        </StyledAuthBox>
+          <div>
+            <Button variant="link" fill onClick={handleClickSignIn}>
+              すでにアカウントをお持ちの方
+            </Button>
+          </div>
+        </AuthBox>
       </StyledAuthLayoutContent>
     </StyledAuthLayout>
   );

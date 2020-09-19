@@ -16,9 +16,11 @@ const GlobalStyle = createGlobalStyle`
   }
 
   body {
+    width: 100%;
     background-color: #ddd;
     margin: 0;
     padding: 0;
+    overflow-x: hidden;
   }
 `;
 

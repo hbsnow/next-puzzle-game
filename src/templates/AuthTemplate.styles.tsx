@@ -2,16 +2,26 @@ import { motion } from "framer-motion";
 import styled from "styled-components";
 
 export const authLayoutContentVariants = {
-  signIn: {
+  showSignIn: {
     opacity: 1,
+    x: 0,
     display: "grid",
   },
-  signUp: {
+  showSignUp: {
     opacity: 1,
+    x: 0,
     display: "grid",
   },
-  hidden: {
+  hiddenSignIn: {
     opacity: 0,
+    x: -100,
+    transitionEnd: {
+      display: "none",
+    },
+  },
+  hiddenSignUp: {
+    opacity: 0,
+    x: 100,
     transitionEnd: {
       display: "none",
     },
@@ -30,12 +40,4 @@ export const StyledAuthLayoutContent = styled(motion.div)`
   width: 100%;
   place-items: center;
   padding: 1rem;
-`;
-
-export const StyledAuthBox = styled(motion.div)`
-  width: 100%;
-  max-width: 24rem;
-  background-color: #fff;
-  padding: 2rem;
-  border-radius: 1rem;
 `;
