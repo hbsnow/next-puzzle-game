@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useMemo } from "react";
 
 import styled from "styled-components";
 
@@ -7,55 +7,58 @@ import { pokemonAreas, PokemonType } from "../../store/pokemonsSlice";
 type ContainerProps = {
   pokemonArea: typeof pokemonAreas[number];
   selectedAreas: PokemonType["area"][];
-  setSelectedAreas: React.Dispatch<React.SetStateAction<PokemonType["area"][]>>;
+  switchArea: (event: React.SyntheticEvent<HTMLButtonElement>) => void;
 };
 
 type Props = {
   className?: string;
   checked: boolean;
-  switchArea: (event: React.SyntheticEvent<HTMLButtonElement>) => void;
-} & Omit<ContainerProps, "selectedAreas" | "setSelectedAreas">;
+} & Omit<ContainerProps, "selectedAreas">;
 
-const Component: React.FC<Props> = ({ pokemonArea, checked, switchArea }) => {
+const Component: React.FC<Props> = (props) => {
+  const { className, pokemonArea, checked, switchArea } = props;
+
   return (
-    <button value={pokemonArea.value} onClick={switchArea}>
-      {checked ? "checked" : ""}
+    <button
+      className={className}
+      value={pokemonArea.value}
+      role="switch"
+      aria-checked={checked}
+      onClick={switchArea}
+    >
       {pokemonArea.name}
     </button>
   );
 };
 
-const StyledComponent = styled(Component)``;
+const StyledComponent = styled(Component)`
+  display: block;
+  width: 100%;
+  text-align: center;
+  cursor: pointer;
+  white-space: nowrap;
+  border: 1px solid #999;
+  color: #999;
+  background: transparent;
+  user-select: none;
+  padding: 0.25rem;
+  font-size: 0.75rem;
+  border-radius: 0.375rem;
+
+  &[aria-checked="true"] {
+    background: #000;
+  }
+`;
 
 export const PokemonBoxButton: React.FC<ContainerProps> = ({
   selectedAreas,
-  setSelectedAreas,
   ...rest
 }) => {
-  const switchArea = useCallback(
-    (event: React.SyntheticEvent<HTMLButtonElement>) => {
-      const target = event.currentTarget;
-      const value = parseInt(target.value);
-
-      if (!selectedAreas.some((area) => area === value)) {
-        selectedAreas.push(value);
-      } else {
-        const targetIndex = selectedAreas.findIndex((area) => area === value);
-        selectedAreas.splice(targetIndex, 1);
-      }
-
-      setSelectedAreas([...selectedAreas]);
-    },
-    [selectedAreas, setSelectedAreas]
-  );
-
   const checked = useMemo(() => {
     return selectedAreas.some(
       (selectedArea) => selectedArea === rest.pokemonArea.value
     );
   }, [rest.pokemonArea.value, selectedAreas]);
 
-  return (
-    <StyledComponent checked={checked} switchArea={switchArea} {...rest} />
-  );
+  return <StyledComponent checked={checked} {...rest} />;
 };

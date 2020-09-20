@@ -29,11 +29,10 @@ const StyledComponent = styled(Component).withConfig({
   color: #575757;
   background: ${(props) =>
     props.variant === "solid" ? "#ccc" : "transparent"};
-  color: #575757;
   user-select: none;
-  padding: 8px 12px;
-  font-size: 14px;
-  border-radius: 6px;
+  font-size: 0.875rem;
+  border-radius: 0.375rem;
+  padding: 0.5rem 0.75rem;
 `;
 
 StyledComponent.defaultProps = {

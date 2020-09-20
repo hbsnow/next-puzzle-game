@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 
 import styled from "styled-components";
 
@@ -12,12 +12,13 @@ type ContainerProps = {
 
 type Props = {
   className?: string;
-} & ContainerProps;
+  switchArea: (event: React.SyntheticEvent<HTMLButtonElement>) => void;
+} & Omit<ContainerProps, "setSelectedAreas">;
 
 const Component: React.FC<Props> = ({
   className,
   selectedAreas,
-  setSelectedAreas,
+  switchArea,
 }) => {
   return (
     <div className={className}>
@@ -27,7 +28,7 @@ const Component: React.FC<Props> = ({
             <PokemonBoxButton
               pokemonArea={area}
               selectedAreas={selectedAreas}
-              setSelectedAreas={setSelectedAreas}
+              switchArea={switchArea}
             />
           </div>
         );
@@ -36,8 +37,35 @@ const Component: React.FC<Props> = ({
   );
 };
 
-const StyledComponent = styled(Component)``;
+const StyledComponent = styled(Component)`
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: repeat(auto-fit, 4.5rem);
+  justify-content: center;
+  padding: 1rem 0.125rem;
+`;
 
-export const PokemonBoxButtonList: React.FC<ContainerProps> = (props) => {
-  return <StyledComponent {...props} />;
+export const PokemonBoxButtonList: React.FC<ContainerProps> = ({
+  setSelectedAreas,
+  ...rest
+}) => {
+  const switchArea = useCallback(
+    (event: React.SyntheticEvent<HTMLButtonElement>) => {
+      const target = event.currentTarget;
+      const value = parseInt(target.value);
+      const selectedAreas = rest.selectedAreas;
+
+      if (!selectedAreas.some((area) => area === value)) {
+        selectedAreas.push(value);
+      } else {
+        const targetIndex = selectedAreas.findIndex((area) => area === value);
+        selectedAreas.splice(targetIndex, 1);
+      }
+
+      setSelectedAreas([...selectedAreas]);
+    },
+    [rest.selectedAreas, setSelectedAreas]
+  );
+
+  return <StyledComponent switchArea={switchArea} {...rest} />;
 };
