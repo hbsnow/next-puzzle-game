@@ -16,10 +16,12 @@ const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    width: 100%;
     background-color: #ddd;
     margin: 0;
     padding: 0;
+
+    /* ログインページ用で必要 */
+    width: 100%;
     overflow-x: hidden;
   }
 `;

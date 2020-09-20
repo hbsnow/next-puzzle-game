@@ -38,9 +38,7 @@ const Component: React.FC<Props> = ({ className, signIn, switchSignUp }) => {
   );
 };
 
-const StyledComponent = styled(Component)`
-  display: block;
-`;
+const StyledComponent = styled(Component)``;
 
 export const AuthBoxSignIn: React.FC<ContainerProps> = (props) => {
   const { signInWithProvider, isLoading } = useSignInWithProvider(
