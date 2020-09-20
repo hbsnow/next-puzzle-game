@@ -1,20 +1,40 @@
 import React from "react";
 
 import Link from "next/link";
-import { useSelector } from "react-redux";
+import styled from "styled-components";
 
-import { RootState } from "../../store";
+type Props = {
+  className?: string;
+};
 
-export const AppHeader: React.FC = () => {
-  const { user } = useSelector((state: RootState) => state.user);
-
+const Component: React.FC<Props> = ({ className }) => {
   return (
-    <>
-      <h1>Lucky Pokemon Share</h1>
-      <div>{user?.userId}</div>
-      <Link href="/signout">
-        <a>Sign Out</a>
-      </Link>
-    </>
+    <div className={className}>
+      <h1 className={`${className}__siteName`}>Lucky Pokemon Share</h1>
+
+      <div className={`${className}__link`}>
+        <Link href="/signout">
+          <a>Sign Out</a>
+        </Link>
+      </div>
+    </div>
   );
 };
+
+const StyledComponent = styled(Component)`
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #000;
+
+  & > &__siteName {
+    font-size: 1rem;
+    margin: 0;
+    padding: 1rem;
+  }
+
+  & > &__link {
+    padding: 1rem;
+  }
+`;
+
+export const AppHeader = StyledComponent;

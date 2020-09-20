@@ -10,19 +10,19 @@ type Props = {
 const Component: React.FC<Props> = ({ className, title }) => {
   return (
     <div className={className}>
-      <h1>Lucky Pokemon Share</h1>
-      <h2>{title}</h2>
+      <h1 className={`${className}__siteName`}>Lucky Pokemon Share</h1>
+      <h2 className={`${className}__title`}>{title}</h2>
     </div>
   );
 };
 
 const StyledComponent = styled(Component)`
-  > h1 {
+  & > &__siteName {
     font-size: 1.25rem;
     margin: 0;
   }
 
-  > h2 {
+  & > &__title {
     font-size: 1rem;
   }
 `;

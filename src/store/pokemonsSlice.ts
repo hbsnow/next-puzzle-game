@@ -2,20 +2,6 @@ import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 
 import { firestore } from "../services/firebase/client";
 
-export const pokemonArea = [
-  "カントー",
-  "ジョウト",
-  "ホウエン",
-  "シンオウ",
-  "イッシュ",
-  "カロス",
-  "アローラ",
-  "ガラル",
-] as const;
-
-export const exceptPokemonArea = [pokemonArea[5]] as const;
-
-export const categorizedKey = ["default"] as const;
 type categorizedKeyType = typeof categorizedKey[number];
 
 export type PokemonType = {
@@ -32,6 +18,19 @@ export type PokemonsState = {
   master?: CategorizedPokemonType<PokemonType[]>;
   changedPokemons?: CategorizedPokemonType<{ [key: string]: number }>;
 };
+
+export const pokemonAreas = [
+  { value: 0, name: "カントー", enable: true },
+  { value: 1, name: "ジョウト", enable: true },
+  { value: 2, name: "ホウエン", enable: true },
+  { value: 3, name: "シンオウ", enable: true },
+  { value: 4, name: "イッシュ", enable: true },
+  { value: 5, name: "カロス", enable: false },
+  { value: 6, name: "アローラ", enable: true },
+  { value: 7, name: "ガラル", enable: true },
+] as const;
+
+export const categorizedKey = ["default"] as const;
 
 export const pokemonsInitialState: PokemonsState = {
   master: undefined,

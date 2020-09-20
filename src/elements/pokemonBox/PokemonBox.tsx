@@ -6,35 +6,20 @@ import { RootState } from "../../store";
 import {
   PokemonType,
   getAllPokemons,
-  pokemonArea,
-  exceptPokemonArea,
   setChangedPokemons,
 } from "../../store/pokemonsSlice";
 import { UserState } from "../../store/userSlice";
+import { PokemonBoxButtonList } from "./PokemonBoxButtonList";
 
 export const PokemonBox: React.FC = () => {
+  const dispatch = useDispatch();
+  const { user } = useSelector((state: RootState) => state.user);
+  const { master } = useSelector((state: RootState) => state.pokemons);
+
   const [selectedAreas, setSelectedAreas] = useState<PokemonType["area"][]>([]);
   const [pokemons, setPokemons] = useState<
     Required<UserState>["user"]["pokemons"] | undefined
   >(undefined);
-
-  const clickTab = (event: React.SyntheticEvent<HTMLButtonElement>) => {
-    const element = event.currentTarget;
-    const value = parseInt(element.value);
-
-    if (!selectedAreas.some((area) => area === value)) {
-      selectedAreas.push(value);
-    } else {
-      const targetIndex = selectedAreas.findIndex((area) => area === value);
-      selectedAreas.splice(targetIndex, 1);
-    }
-
-    setSelectedAreas([...selectedAreas]);
-  };
-
-  const dispatch = useDispatch();
-  const { user } = useSelector((state: RootState) => state.user);
-  const { master } = useSelector((state: RootState) => state.pokemons);
 
   const changeHandler = (data: SyntheticEvent<HTMLInputElement>) => {
     setPokemons({
@@ -65,19 +50,12 @@ export const PokemonBox: React.FC = () => {
 
   return (
     <>
-      <div>
-        {pokemonArea.map((area, i) => {
-          if (exceptPokemonArea.some((expectArea) => expectArea === area)) {
-            return;
-          }
+      <PokemonBoxButtonList
+        selectedAreas={selectedAreas}
+        setSelectedAreas={setSelectedAreas}
+      />
 
-          return (
-            <button key={area} onClick={clickTab} value={i}>
-              {area}
-            </button>
-          );
-        })}
-      </div>
+      {/* <PokemonBoxTable switchArea={switchArea} /> */}
 
       {master && user?.pokemons && (
         <table>
