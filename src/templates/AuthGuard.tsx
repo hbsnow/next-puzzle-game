@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import firebase, { firestore } from "firebase/app";
 import { useDispatch, useSelector } from "react-redux";
+import styled from "styled-components";
 
 import Loader from "../components/loader/Loader";
 import { auth } from "../services/firebase/client";
@@ -12,6 +13,12 @@ import { AppTemplate } from "./AppTemplate";
 import { AuthTemplate } from "./AuthTemplate";
 
 export const AuthContext = React.createContext<undefined>(undefined);
+
+type Props = {
+  className?: string;
+  isLoading: boolean;
+  isAuthorized: boolean;
+};
 
 const mightRegist = async (
   uid: firebase.User["uid"]
@@ -37,22 +44,43 @@ const mightRegist = async (
   return userDoc.get();
 };
 
-export const AuthGuard: React.FC = ({ children }) => {
+const Component: React.FC<Props> = (props) => {
+  const { className, isLoading, isAuthorized } = props;
+
+  return (
+    <div className={className}>
+      <Loader isLoading={isLoading} isCoverScreen>
+        {isAuthorized ? (
+          <AppTemplate>{props.children}</AppTemplate>
+        ) : (
+          <AuthTemplate />
+        )}
+      </Loader>
+    </div>
+  );
+};
+
+const StyledComponent = styled(Component)``;
+
+export const AuthGuard: React.FC = (props) => {
   const dispatch = useDispatch();
   const { user } = useSelector((state: RootState) => state.user);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (nextUser) => {
-      setIsLoading(false);
-
       if (nextUser) {
-        const snapshot = await mightRegist(nextUser.uid);
-        const user = snapshot.data();
+        try {
+          const snapshot = await mightRegist(nextUser.uid);
+          const user = snapshot.data();
 
-        dispatch(setUser(user));
+          dispatch(setUser(user));
+        } finally {
+          setIsLoading(false);
+        }
       } else {
         dispatch(clearUser());
+        setIsLoading(false);
       }
     });
 
@@ -62,9 +90,6 @@ export const AuthGuard: React.FC = ({ children }) => {
   }, [dispatch]);
 
   return (
-    <>
-      {user ? <AppTemplate>{children}</AppTemplate> : <AuthTemplate />}
-      <Loader isLoading={isLoading} />
-    </>
+    <StyledComponent isLoading={isLoading} isAuthorized={!!user} {...props} />
   );
 };
