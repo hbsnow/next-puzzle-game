@@ -1,95 +1,44 @@
-import React, { useState, useEffect, SyntheticEvent } from "react";
+import React, { useState } from "react";
 
-import { useDispatch, useSelector } from "react-redux";
+import styled from "styled-components";
 
-import { RootState } from "../../store";
-import {
-  PokemonType,
-  getAllPokemons,
-  setChangedPokemons,
-} from "../../store/pokemonsSlice";
-import { UserState } from "../../store/userSlice";
+import { PokemonType } from "../../store/pokemonsSlice";
 import { PokemonBoxButtonList } from "./PokemonBoxButtonList";
+import { PokemonBoxTable } from "./PokemonBoxTable";
 
-export const PokemonBox: React.FC = () => {
-  const dispatch = useDispatch();
-  const { user } = useSelector((state: RootState) => state.user);
-  const { master } = useSelector((state: RootState) => state.pokemons);
+type ContainerProps = {
+  selectedArea: PokemonType["area"];
+  setSelectedArea: React.Dispatch<React.SetStateAction<PokemonType["area"]>>;
+};
 
-  const [selectedAreas, setSelectedAreas] = useState<PokemonType["area"][]>([]);
-  const [pokemons, setPokemons] = useState<
-    Required<UserState>["user"]["pokemons"] | undefined
-  >(undefined);
+type Props = {
+  className?: string;
+} & ContainerProps;
 
-  const changeHandler = (data: SyntheticEvent<HTMLInputElement>) => {
-    setPokemons({
-      ...pokemons,
-      ...{
-        default: {
-          ...pokemons?.default,
-          [data.currentTarget.name]: parseInt(data.currentTarget.value),
-        },
-      },
-    });
-
-    dispatch(
-      setChangedPokemons({
-        key: "default",
-        changedPokemons: {
-          [data.currentTarget.name]: parseInt(data.currentTarget.value),
-        },
-      })
-    );
-  };
-
-  useEffect(() => {
-    if (!master) {
-      dispatch(getAllPokemons());
-    }
-  }, [dispatch, master]);
+const Component: React.FC<Props> = (props) => {
+  const { className, selectedArea, setSelectedArea } = props;
 
   return (
-    <>
+    <div className={className}>
       <PokemonBoxButtonList
-        selectedAreas={selectedAreas}
-        setSelectedAreas={setSelectedAreas}
+        selectedArea={selectedArea}
+        setSelectedArea={setSelectedArea}
       />
 
-      {/* <PokemonBoxTable switchArea={switchArea} /> */}
+      <PokemonBoxTable selectedArea={selectedArea} />
+    </div>
+  );
+};
 
-      {master && user?.pokemons && (
-        <table>
-          <thead>
-            <tr>
-              <td>Name</td>
-              <td>Lucky</td>
-            </tr>
-          </thead>
-          <tbody>
-            {master.default.map((pokemon) => {
-              if (!selectedAreas.some((area) => area === pokemon.area)) {
-                return;
-              }
+const StyledComponent = styled(Component)``;
 
-              return (
-                <tr key={pokemon.no}>
-                  <td>{pokemon.name}</td>
-                  <td>
-                    <input
-                      type="number"
-                      min={0}
-                      inputMode="decimal"
-                      name={`${pokemon.no}`}
-                      defaultValue={user.pokemons?.default?.[pokemon.no] ?? 0}
-                      onChange={changeHandler}
-                    />
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      )}
-    </>
+export const PokemonBox: React.FC = () => {
+  const [selectedArea, setSelectedArea] = useState(0);
+
+  return (
+    <StyledComponent
+      selectedArea={selectedArea}
+      setSelectedArea={setSelectedArea}
+    />
   );
 };

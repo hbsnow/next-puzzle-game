@@ -6,19 +6,19 @@ import { pokemonAreas, PokemonType } from "../../store/pokemonsSlice";
 import { PokemonBoxButton } from "./PokemonBoxButton";
 
 type ContainerProps = {
-  selectedAreas: PokemonType["area"][];
-  setSelectedAreas: React.Dispatch<React.SetStateAction<PokemonType["area"][]>>;
+  selectedArea: PokemonType["area"];
+  setSelectedArea: React.Dispatch<React.SetStateAction<PokemonType["area"]>>;
 };
 
 type Props = {
   className?: string;
-  switchArea: (event: React.SyntheticEvent<HTMLButtonElement>) => void;
-} & Omit<ContainerProps, "setSelectedAreas">;
+  selectArea: (event: React.SyntheticEvent<HTMLButtonElement>) => void;
+} & Omit<ContainerProps, "setSelectedArea">;
 
 const Component: React.FC<Props> = ({
   className,
-  selectedAreas,
-  switchArea,
+  selectedArea,
+  selectArea,
 }) => {
   return (
     <div className={className}>
@@ -27,8 +27,8 @@ const Component: React.FC<Props> = ({
           <div key={area.value}>
             <PokemonBoxButton
               pokemonArea={area}
-              selectedAreas={selectedAreas}
-              switchArea={switchArea}
+              selectedArea={selectedArea}
+              selectArea={selectArea}
             />
           </div>
         );
@@ -42,30 +42,23 @@ const StyledComponent = styled(Component)`
   gap: 0.5rem;
   grid-template-columns: repeat(auto-fit, 4.5rem);
   justify-content: center;
-  padding: 1rem 0.125rem;
+  border-bottom: 1px solid #000;
+  padding: 0.5rem 0.125rem;
 `;
 
 export const PokemonBoxButtonList: React.FC<ContainerProps> = ({
-  setSelectedAreas,
+  setSelectedArea,
   ...rest
 }) => {
-  const switchArea = useCallback(
+  const selectArea = useCallback(
     (event: React.SyntheticEvent<HTMLButtonElement>) => {
       const target = event.currentTarget;
       const value = parseInt(target.value);
-      const selectedAreas = rest.selectedAreas;
 
-      if (!selectedAreas.some((area) => area === value)) {
-        selectedAreas.push(value);
-      } else {
-        const targetIndex = selectedAreas.findIndex((area) => area === value);
-        selectedAreas.splice(targetIndex, 1);
-      }
-
-      setSelectedAreas([...selectedAreas]);
+      setSelectedArea(value);
     },
-    [rest.selectedAreas, setSelectedAreas]
+    [setSelectedArea]
   );
 
-  return <StyledComponent switchArea={switchArea} {...rest} />;
+  return <StyledComponent selectArea={selectArea} {...rest} />;
 };

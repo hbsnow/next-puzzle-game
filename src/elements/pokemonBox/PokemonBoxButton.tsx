@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 
 import styled from "styled-components";
 
@@ -6,17 +6,17 @@ import { pokemonAreas, PokemonType } from "../../store/pokemonsSlice";
 
 type ContainerProps = {
   pokemonArea: typeof pokemonAreas[number];
-  selectedAreas: PokemonType["area"][];
-  switchArea: (event: React.SyntheticEvent<HTMLButtonElement>) => void;
+  selectedArea: PokemonType["area"];
+  selectArea: (event: React.SyntheticEvent<HTMLButtonElement>) => void;
 };
 
 type Props = {
   className?: string;
   checked: boolean;
-} & Omit<ContainerProps, "selectedAreas">;
+} & Omit<ContainerProps, "selectedArea">;
 
 const Component: React.FC<Props> = (props) => {
-  const { className, pokemonArea, checked, switchArea } = props;
+  const { className, pokemonArea, checked, selectArea } = props;
 
   return (
     <button
@@ -24,7 +24,7 @@ const Component: React.FC<Props> = (props) => {
       value={pokemonArea.value}
       role="switch"
       aria-checked={checked}
-      onClick={switchArea}
+      onClick={selectArea}
     >
       {pokemonArea.name}
     </button>
@@ -37,8 +37,8 @@ const StyledComponent = styled(Component)`
   text-align: center;
   cursor: pointer;
   white-space: nowrap;
-  border: 1px solid #999;
-  color: #999;
+  border: 1px solid transparent;
+  color: #888;
   background: transparent;
   user-select: none;
   padding: 0.25rem;
@@ -51,14 +51,13 @@ const StyledComponent = styled(Component)`
 `;
 
 export const PokemonBoxButton: React.FC<ContainerProps> = ({
-  selectedAreas,
+  selectedArea,
   ...rest
 }) => {
-  const checked = useMemo(() => {
-    return selectedAreas.some(
-      (selectedArea) => selectedArea === rest.pokemonArea.value
-    );
-  }, [rest.pokemonArea.value, selectedAreas]);
-
-  return <StyledComponent checked={checked} {...rest} />;
+  return (
+    <StyledComponent
+      checked={selectedArea === rest.pokemonArea.value}
+      {...rest}
+    />
+  );
 };
