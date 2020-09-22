@@ -27,7 +27,8 @@ export const pokemonAreas = [
   { value: 4, name: "イッシュ", enable: true },
   { value: 5, name: "カロス", enable: false },
   { value: 6, name: "アローラ", enable: true },
-  { value: 7, name: "ガラル", enable: true },
+  { value: 7, name: "未確認", enable: true },
+  { value: 8, name: "ガラル", enable: true },
 ] as const;
 
 export const categorizedKey = ["default"] as const;

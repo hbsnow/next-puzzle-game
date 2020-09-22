@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import firebase, { firestore } from "firebase/app";
+import { useRouter } from "next/dist/client/router";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 
@@ -64,6 +65,7 @@ const StyledComponent = styled(Component)``;
 
 export const AuthGuard: React.FC = (props) => {
   const dispatch = useDispatch();
+  const router = useRouter();
   const { user } = useSelector((state: RootState) => state.user);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -88,6 +90,14 @@ export const AuthGuard: React.FC = (props) => {
       unsubscribe();
     };
   }, [dispatch]);
+
+  useEffect(() => {
+    if (user) {
+      return;
+    }
+
+    router.replace("/");
+  }, [router, user]);
 
   return (
     <StyledComponent isLoading={isLoading} isAuthorized={!!user} {...props} />
