@@ -1,15 +1,11 @@
-import React, { SyntheticEvent, useEffect, useState } from "react";
+import React, { useEffect, useMemo } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 
 import { RootState } from "../../store";
-import {
-  getAllPokemons,
-  PokemonType,
-  setChangedPokemons,
-} from "../../store/pokemonsSlice";
-import { UserState } from "../../store/userSlice";
+import { getAllPokemons } from "../../store/pokemonsSlice";
+import { PokemonType } from "../../types/pokemon";
 import { PokemonBoxTableRow } from "./PokemonBoxTableRow";
 
 type ContainerProps = {
@@ -19,22 +15,17 @@ type ContainerProps = {
 type Props = {
   className?: string;
   pokemons: PokemonType[];
-  changeAmount: (data: SyntheticEvent<HTMLInputElement>) => void;
-} & ContainerProps;
+} & Omit<ContainerProps, "selectedArea">;
 
 const Component: React.FC<Props> = (props) => {
-  const { className, pokemons, selectedArea, changeAmount } = props;
+  const { className, pokemons } = props;
 
   return (
     <div className={className}>
       {pokemons.map((pokemon) => {
         return (
           <div key={pokemon.no}>
-            <PokemonBoxTableRow
-              changeAmount={changeAmount}
-              pokemon={pokemon}
-              selectedArea={selectedArea}
-            />
+            <PokemonBoxTableRow pokemon={pokemon} />
           </div>
         );
       })}
@@ -52,30 +43,15 @@ export const PokemonBoxTable: React.FC<ContainerProps> = (props) => {
   const dispatch = useDispatch();
   const { master } = useSelector((state: RootState) => state.pokemons);
 
-  const [pokemons, setPokemons] = useState<
-    Required<UserState>["user"]["pokemons"]
-  >();
+  const filteredPokemons = useMemo(() => {
+    if (!master) {
+      return [];
+    }
 
-  const changeAmount = (data: SyntheticEvent<HTMLInputElement>) => {
-    setPokemons({
-      ...pokemons,
-      ...{
-        default: {
-          ...pokemons?.default,
-          [data.currentTarget.name]: parseInt(data.currentTarget.value),
-        },
-      },
-    });
-
-    dispatch(
-      setChangedPokemons({
-        key: "default",
-        changedPokemons: {
-          [data.currentTarget.name]: parseInt(data.currentTarget.value),
-        },
-      })
+    return master?.data.filter(
+      (pokemon) => pokemon.area === props.selectedArea
     );
-  };
+  }, [master, props.selectedArea]);
 
   useEffect(() => {
     if (!master) {
@@ -83,15 +59,9 @@ export const PokemonBoxTable: React.FC<ContainerProps> = (props) => {
     }
   }, [dispatch, master]);
 
-  if (!master?.default) {
+  if (!master) {
     return <>loading</>;
   }
 
-  return (
-    <StyledComponent
-      pokemons={master.default}
-      changeAmount={changeAmount}
-      {...props}
-    />
-  );
+  return <StyledComponent pokemons={filteredPokemons} {...props} />;
 };

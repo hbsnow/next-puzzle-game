@@ -7,12 +7,12 @@ import {
 import firebase from "firebase";
 
 import { firestore } from "../services/firebase/client";
-import { CategorizedPokemonType } from "./pokemonsSlice";
+import { PokemonBoxType } from "../types/pokemon";
 
 export type UserState = {
   user?: {
     userId: string;
-    pokemons: CategorizedPokemonType<{ [key: string]: number }>;
+    pokemons: PokemonBoxType[];
     createdAt: firebase.firestore.FieldValue;
     updatedAt: firebase.firestore.FieldValue;
   };

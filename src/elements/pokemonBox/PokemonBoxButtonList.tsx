@@ -2,7 +2,8 @@ import React, { useCallback } from "react";
 
 import styled from "styled-components";
 
-import { pokemonAreas, PokemonType } from "../../store/pokemonsSlice";
+import { pokemonAreas } from "../../constants/pokemons";
+import { PokemonType } from "../../types/pokemon";
 import { PokemonBoxButton } from "./PokemonBoxButton";
 
 type ContainerProps = {
@@ -12,17 +13,19 @@ type ContainerProps = {
 
 type Props = {
   className?: string;
+  areas: typeof pokemonAreas;
   selectArea: (event: React.SyntheticEvent<HTMLButtonElement>) => void;
 } & Omit<ContainerProps, "setSelectedArea">;
 
 const Component: React.FC<Props> = ({
   className,
+  areas,
   selectedArea,
   selectArea,
 }) => {
   return (
     <div className={className}>
-      {pokemonAreas.map((area) => {
+      {areas.map((area) => {
         return (
           <div key={area.value}>
             <PokemonBoxButton
@@ -60,5 +63,7 @@ export const PokemonBoxButtonList: React.FC<ContainerProps> = ({
     [setSelectedArea]
   );
 
-  return <StyledComponent selectArea={selectArea} {...rest} />;
+  return (
+    <StyledComponent areas={pokemonAreas} selectArea={selectArea} {...rest} />
+  );
 };

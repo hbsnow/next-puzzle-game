@@ -5,7 +5,7 @@ import { NextPage } from "next";
 import { firestore } from "../../services/firebase/client";
 
 const pokemons = {
-  default: [
+  data: [
     { no: 1, name: "フシギダネ", area: 0 },
     { no: 2, name: "フシギソウ", area: 0 },
     { no: 3, name: "フシギバナ", area: 0 },
@@ -366,6 +366,9 @@ const pokemons = {
       ],
       area: 2,
     },
+    // { no: 351, name: "ポワルン(たいようのすがた)", area: 2 },
+    // { no: 351, name: "ポワルン(あまみずのすがた)", area: 2 },
+    // { no: 351, name: "ポワルン(ゆきぐものすがた)", area: 2 },
     // { no: 352, name: "カクレオン", area: 2 },
     { no: 353, name: "カゲボウズ", area: 2 },
     { no: 354, name: "ジュペッタ", area: 2 },
@@ -677,12 +680,12 @@ const pokemons = {
     // { no: 648, name: "メロエッタ(ボイスフォルム)", area: 4 },
     // { no: 648, name: "メロエッタ(ステップフォルム)", area: 4 },
     { no: 649, name: "ゲノセクト", area: 4 },
-    { no: 808, name: "メルタン", area: 7 },
-    { no: 809, name: "メルメタル", area: 7 },
-    { no: 862, name: "タチフサグマ", area: 8 },
-    { no: 863, name: "ニャイキング", area: 8 },
-  ],
-  alola: [
+    { no: 808, name: "メルタン", area: 99 },
+    { no: 809, name: "メルメタル", area: 99 },
+    { no: 862, name: "タチフサグマ", area: 7 },
+    { no: 863, name: "ニャイキング", area: 7 },
+
+    // アローラ
     { no: 19, name: "コラッタ", area: 6 },
     { no: 20, name: "ラッタ", area: 6 },
     { no: 26, name: "ライチュウ", area: 6 },
@@ -701,27 +704,27 @@ const pokemons = {
     { no: 89, name: "ベトベトン", area: 6 },
     { no: 103, name: "ナッシー", area: 6 },
     { no: 105, name: "ガラガラ", area: 6 },
-  ],
-  galar: [
-    // { no: 77, name: "ポニータ", area: 8 },
-    // { no: 78, name: "ギャロップ", area: 8 },
-    // { no: 79, name: "ヤドン", area: 8 },
-    // { no: 80, name: "ヤドラン", area: 8 },
-    { no: 83, name: "カモネギ", area: 8 },
-    { no: 52, name: "ニャース", area: 8 },
-    { no: 110, name: "マタドガス", area: 8 },
-    // { no: 122, name: "バリヤード", area: 8 },
-    // { no: 144, name: "フリーザー", area: 8 },
-    // { no: 145, name: "サンダー", area: 8 },
-    // { no: 146, name: "ファイヤー", area: 8 },
-    // { no: 222, name: "サニーゴ", area: 8 },
-    { no: 263, name: "ジグザグマ", area: 8 },
-    { no: 264, name: "マッスグマ", area: 8 },
-    { no: 554, name: "ダルマッカ", area: 8 },
-    { no: 555, name: "ヒヒダルマ", area: 8 },
-    // { no: 555, name: "ヒヒダルマ(ダルマモード)", area: 8 },
-    // { no: 562, name: "デスマス", area: 8 },
-    { no: 618, name: "マッギョ", area: 8 },
+
+    // ガラル
+    // { no: 77, name: "ポニータ", area: 7 },
+    // { no: 78, name: "ギャロップ", area: 7 },
+    // { no: 79, name: "ヤドン", area: 7 },
+    // { no: 80, name: "ヤドラン", area: 7 },
+    { no: 83, name: "カモネギ", area: 7 },
+    { no: 52, name: "ニャース", area: 7 },
+    { no: 110, name: "マタドガス", area: 7 },
+    // { no: 122, name: "バリヤード", area: 7 },
+    // { no: 144, name: "フリーザー", area: 7 },
+    // { no: 145, name: "サンダー", area: 7 },
+    // { no: 146, name: "ファイヤー", area: 7 },
+    // { no: 222, name: "サニーゴ", area: 7 },
+    { no: 263, name: "ジグザグマ", area: 7 },
+    { no: 264, name: "マッスグマ", area: 7 },
+    { no: 554, name: "ダルマッカ", area: 7 },
+    { no: 555, name: "ヒヒダルマ", area: 7 },
+    // { no: 555, name: "ヒヒダルマ(ダルマモード)", area: 7 },
+    // { no: 562, name: "デスマス", area: 7 },
+    { no: 618, name: "マッギョ", area: 7 },
   ],
 };
 

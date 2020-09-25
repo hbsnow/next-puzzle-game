@@ -32,7 +32,7 @@ export const useSignUpWithEmailAndPassword = (): {
           password
         );
         if (result.user) {
-          dispatch(setUser(result.user));
+          // dispatch(setUser(result.user));
         } else {
           // TODO: ここにくるのはどういうケースなのか
           dispatch(clearUser());

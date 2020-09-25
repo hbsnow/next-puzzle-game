@@ -8,7 +8,6 @@ import styled from "styled-components";
 import Loader from "../components/loader/Loader";
 import { auth } from "../services/firebase/client";
 import { RootState } from "../store";
-import { categorizedKey } from "../store/pokemonsSlice";
 import { setUser, clearUser, getUserDoc, UserState } from "../store/userSlice";
 import { AppTemplate } from "./AppTemplate";
 import { AuthTemplate } from "./AuthTemplate";
@@ -32,12 +31,10 @@ const mightRegist = async (
   }
 
   const timestamp = firestore.FieldValue.serverTimestamp();
-  const pokemons = Object.fromEntries(
-    categorizedKey.map((key) => [key, {}])
-  ) as Required<UserState>["user"]["pokemons"];
+
   await userDoc.set({
     userId: uid,
-    pokemons,
+    pokemons: [],
     createdAt: timestamp,
     updatedAt: timestamp,
   });

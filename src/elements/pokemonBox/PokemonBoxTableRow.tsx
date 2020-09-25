@@ -1,35 +1,35 @@
-import React, { SyntheticEvent } from "react";
+import React, { SyntheticEvent, useMemo } from "react";
 
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 
 import { RootState } from "../../store";
-import { PokemonType } from "../../store/pokemonsSlice";
+import { setChangedPokemons } from "../../store/pokemonsSlice";
+import { PokemonType } from "../../types/pokemon";
 
 type ContainerProps = {
   pokemon: PokemonType;
-  selectedArea: PokemonType["area"];
-  changeAmount: (data: SyntheticEvent<HTMLInputElement>) => void;
 };
 
 type Props = {
   className?: string;
-  defaultValue: number;
-} & Omit<ContainerProps, "selectedArea">;
+  name: PokemonType["name"];
+  initialAmount: number;
+  changeAmount: (data: SyntheticEvent<HTMLInputElement>) => void;
+} & Omit<ContainerProps, "pokemon">;
 
 const Component: React.FC<Props> = (props) => {
-  const { className, pokemon, defaultValue, changeAmount } = props;
+  const { className, name, initialAmount, changeAmount } = props;
 
   return (
     <div className={className}>
-      <div className={`${className}__name`}>{pokemon.name}</div>
+      <div className={`${className}__name`}>{name}</div>
       <div>
         <input
           type="number"
           min={0}
           inputMode="decimal"
-          name={`${pokemon.no}`}
-          defaultValue={defaultValue}
+          defaultValue={initialAmount}
           onChange={changeAmount}
         />
       </div>
@@ -39,7 +39,7 @@ const Component: React.FC<Props> = (props) => {
 
 const StyledComponent = styled(Component)`
   display: grid;
-  grid-template-columns: 5rem 1fr;
+  grid-template-columns: 6rem 1fr;
   justify-content: center;
   align-items: center;
   gap: 0.5rem;
@@ -50,18 +50,46 @@ const StyledComponent = styled(Component)`
 `;
 
 export const PokemonBoxTableRow: React.FC<ContainerProps> = ({
-  selectedArea,
+  pokemon,
   ...rest
 }) => {
+  const dispatch = useDispatch();
   const { user } = useSelector((state: RootState) => state.user);
 
-  if (selectedArea !== rest.pokemon.area) {
-    return null;
-  }
+  const changeAmount = (data: SyntheticEvent<HTMLInputElement>) => {
+    const target = data.currentTarget;
+    const amount = parseInt(target.value);
+
+    if (!Number.isFinite(amount)) {
+      return;
+    }
+
+    dispatch(
+      setChangedPokemons({
+        area: pokemon.area,
+        no: pokemon.no,
+        amount,
+      })
+    );
+  };
+
+  const initialAmount = useMemo(() => {
+    const currentPokemon = user?.pokemons.filter((userPokemon) => {
+      return userPokemon.no === pokemon.no && userPokemon.area === pokemon.area;
+    });
+
+    if (!currentPokemon || !currentPokemon.length) {
+      return 0;
+    }
+
+    return currentPokemon[0].amount;
+  }, [pokemon.area, pokemon.no, user?.pokemons]);
 
   return (
     <StyledComponent
-      defaultValue={user?.pokemons?.default?.[rest.pokemon.no] ?? 0}
+      name={pokemon.name}
+      initialAmount={initialAmount}
+      changeAmount={changeAmount}
       {...rest}
     />
   );

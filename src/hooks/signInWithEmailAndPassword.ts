@@ -32,7 +32,7 @@ export const useSignInWithEmailAndPassword = (): {
       try {
         const result = await auth.signInWithEmailAndPassword(email, password);
         if (result.user) {
-          dispatch(setUser(result.user));
+          // dispatch(setUser(result.user));
         } else {
           // TODO: ここにくるのはどういうケースなのか
           dispatch(clearUser());
