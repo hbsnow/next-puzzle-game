@@ -6,6 +6,7 @@ import styled from "styled-components";
 import { RootState } from "../../store";
 import { setChangedPokemons } from "../../store/pokemonsSlice";
 import { PokemonType } from "../../types/pokemon";
+import { updatePokemonBox } from "../../utils/pokemon";
 
 type ContainerProps = {
   pokemon: PokemonType;
@@ -65,25 +66,10 @@ export const PokemonBoxTableRow: React.FC<ContainerProps> = ({
       return;
     }
 
-    const existChangedPokemon = changedPokemons.some((userPokemon) => {
-      return userPokemon.no === pokemon.no && userPokemon.area === pokemon.area;
-    });
-
-    if (!existChangedPokemon) {
-      const addedPokemon = { no: pokemon.no, area: pokemon.area, amount };
-      dispatch(setChangedPokemons([...changedPokemons, addedPokemon]));
-      return;
-    }
-
-    const pokemons = changedPokemons.map((changedPokemon) => {
-      if (
-        changedPokemon.no === pokemon.no &&
-        changedPokemon.area === pokemon.area
-      ) {
-        return { no: pokemon.no, area: pokemon.area, amount };
-      }
-
-      return changedPokemon;
+    const pokemons = updatePokemonBox(changedPokemons, {
+      no: pokemon.no,
+      area: pokemon.area,
+      amount,
     });
 
     dispatch(setChangedPokemons(pokemons));

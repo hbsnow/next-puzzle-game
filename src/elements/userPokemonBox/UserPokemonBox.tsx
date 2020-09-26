@@ -15,7 +15,7 @@ import { UserPokemonBoxTable } from "./UserPokemonBoxTable";
 
 type Props = {
   className?: string;
-  master?: PokemonsState["master"];
+  master: PokemonsState["master"];
   pokemons?: PokemonBoxType[];
 };
 

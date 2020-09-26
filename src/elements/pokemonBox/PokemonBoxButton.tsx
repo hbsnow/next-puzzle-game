@@ -2,7 +2,8 @@ import React from "react";
 
 import styled from "styled-components";
 
-import { pokemonAreas, PokemonType } from "../../store/pokemonsSlice";
+import { pokemonAreas } from "../../constants/pokemons";
+import { PokemonType } from "../../types/pokemon";
 
 type ContainerProps = {
   pokemonArea: typeof pokemonAreas[number];

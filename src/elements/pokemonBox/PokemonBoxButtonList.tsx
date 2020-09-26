@@ -17,12 +17,8 @@ type Props = {
   selectArea: (event: React.SyntheticEvent<HTMLButtonElement>) => void;
 } & Omit<ContainerProps, "setSelectedArea">;
 
-const Component: React.FC<Props> = ({
-  className,
-  areas,
-  selectedArea,
-  selectArea,
-}) => {
+const Component: React.FC<Props> = (props) => {
+  const { className, areas, selectedArea, selectArea } = props;
   return (
     <div className={className}>
       {areas.map((area) => {
@@ -49,10 +45,9 @@ const StyledComponent = styled(Component)`
   padding: 0.5rem 0.125rem;
 `;
 
-export const PokemonBoxButtonList: React.FC<ContainerProps> = ({
-  setSelectedArea,
-  ...rest
-}) => {
+export const PokemonBoxButtonList: React.FC<ContainerProps> = (props) => {
+  const { setSelectedArea, ...rest } = props;
+
   const selectArea = useCallback(
     (event: React.SyntheticEvent<HTMLButtonElement>) => {
       const target = event.currentTarget;

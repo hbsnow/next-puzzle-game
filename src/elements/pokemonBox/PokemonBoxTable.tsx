@@ -1,21 +1,20 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useMemo } from "react";
 
-import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 
-import { RootState } from "../../store";
-import { getAllPokemons } from "../../store/pokemonsSlice";
+import { PokemonsState } from "../../store/pokemonsSlice";
 import { PokemonType } from "../../types/pokemon";
 import { PokemonBoxTableRow } from "./PokemonBoxTableRow";
 
 type ContainerProps = {
+  master: Required<PokemonsState>["master"];
   selectedArea: PokemonType["area"];
 };
 
 type Props = {
   className?: string;
   pokemons: PokemonType[];
-} & Omit<ContainerProps, "selectedArea">;
+} & Omit<ContainerProps, "master" | "selectedArea">;
 
 const Component: React.FC<Props> = (props) => {
   const { className, pokemons } = props;
@@ -40,28 +39,13 @@ const StyledComponent = styled(Component)`
 `;
 
 export const PokemonBoxTable: React.FC<ContainerProps> = (props) => {
-  const dispatch = useDispatch();
-  const { master } = useSelector((state: RootState) => state.pokemons);
+  const { master, ...rest } = props;
 
   const filteredPokemons = useMemo(() => {
-    if (!master) {
-      return [];
-    }
-
     return master?.data.filter(
       (pokemon) => pokemon.area === props.selectedArea
     );
   }, [master, props.selectedArea]);
 
-  useEffect(() => {
-    if (!master) {
-      dispatch(getAllPokemons());
-    }
-  }, [dispatch, master]);
-
-  if (!master) {
-    return <>loading</>;
-  }
-
-  return <StyledComponent pokemons={filteredPokemons} {...props} />;
+  return <StyledComponent pokemons={filteredPokemons ?? []} {...rest} />;
 };

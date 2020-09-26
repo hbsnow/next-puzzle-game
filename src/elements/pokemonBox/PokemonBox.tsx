@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 
-import { PokemonType } from "../../store/pokemonsSlice";
+import { RootState } from "../../store";
+import { getAllPokemons, PokemonsState } from "../../store/pokemonsSlice";
+import { PokemonType } from "../../types/pokemon";
 import { PokemonBoxButtonList } from "./PokemonBoxButtonList";
 import { PokemonBoxTable } from "./PokemonBoxTable";
 
@@ -13,10 +16,11 @@ type ContainerProps = {
 
 type Props = {
   className?: string;
+  master: Required<PokemonsState>["master"];
 } & ContainerProps;
 
 const Component: React.FC<Props> = (props) => {
-  const { className, selectedArea, setSelectedArea } = props;
+  const { className, master, selectedArea, setSelectedArea } = props;
 
   return (
     <div className={className}>
@@ -25,7 +29,7 @@ const Component: React.FC<Props> = (props) => {
         setSelectedArea={setSelectedArea}
       />
 
-      <PokemonBoxTable selectedArea={selectedArea} />
+      <PokemonBoxTable master={master} selectedArea={selectedArea} />
     </div>
   );
 };
@@ -33,10 +37,23 @@ const Component: React.FC<Props> = (props) => {
 const StyledComponent = styled(Component)``;
 
 export const PokemonBox: React.FC = () => {
+  const dispatch = useDispatch();
+  const { master } = useSelector((state: RootState) => state.pokemons);
   const [selectedArea, setSelectedArea] = useState(0);
+
+  useEffect(() => {
+    if (!master) {
+      dispatch(getAllPokemons());
+    }
+  }, [dispatch, master]);
+
+  if (!master) {
+    return <>loading</>;
+  }
 
   return (
     <StyledComponent
+      master={master}
       selectedArea={selectedArea}
       setSelectedArea={setSelectedArea}
     />
