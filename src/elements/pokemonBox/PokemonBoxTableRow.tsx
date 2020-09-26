@@ -3,6 +3,7 @@ import React, { SyntheticEvent, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 
+import { Input } from "../../components/input/Input";
 import { RootState } from "../../store";
 import { setChangedPokemons } from "../../store/pokemonsSlice";
 import { PokemonType } from "../../types/pokemon";
@@ -25,13 +26,14 @@ const Component: React.FC<Props> = (props) => {
   return (
     <div className={className}>
       <div className={`${className}__name`}>{name}</div>
-      <div>
-        <input
+      <div className={`${className}__input`}>
+        <Input
           type="number"
           min={0}
           inputMode="decimal"
           defaultValue={initialAmount}
           onChange={changeAmount}
+          fill
         />
       </div>
     </div>
@@ -40,13 +42,11 @@ const Component: React.FC<Props> = (props) => {
 
 const StyledComponent = styled(Component)`
   display: grid;
-  grid-template-columns: 6rem 1fr;
-  justify-content: center;
+  grid-template-columns: auto 2rem;
   align-items: center;
-  gap: 0.5rem;
 
-  &__name {
-    font-size: 0.875rem;
+  & > &__name {
+    font-size: 0.75rem;
   }
 `;
 

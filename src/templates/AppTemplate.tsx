@@ -12,15 +12,11 @@ type Props = {
 const Component: React.FC<Props> = ({ children, className }) => {
   return (
     <div className={className}>
-      <header>
-        <AppHeader />
-      </header>
+      <AppHeader />
 
       <div className={`${className}__body`}>{children}</div>
 
-      <footer>
-        <AppFooter />
-      </footer>
+      <AppFooter />
     </div>
   );
 };

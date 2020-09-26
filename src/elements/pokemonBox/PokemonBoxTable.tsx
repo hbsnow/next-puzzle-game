@@ -23,7 +23,7 @@ const Component: React.FC<Props> = (props) => {
     <div className={className}>
       {pokemons.map((pokemon) => {
         return (
-          <div key={pokemon.no}>
+          <div key={pokemon.no} className={`${className}__row`}>
             <PokemonBoxTableRow pokemon={pokemon} />
           </div>
         );
@@ -34,7 +34,8 @@ const Component: React.FC<Props> = (props) => {
 
 const StyledComponent = styled(Component)`
   display: grid;
-  gap: 0.25rem;
+  grid-template-columns: repeat(auto-fit, minmax(7rem, 1fr));
+  gap: 0.25rem 0.5rem;
   padding: 0.25rem;
 `;
 
@@ -47,5 +48,5 @@ export const PokemonBoxTable: React.FC<ContainerProps> = (props) => {
     );
   }, [master, props.selectedArea]);
 
-  return <StyledComponent pokemons={filteredPokemons ?? []} {...rest} />;
+  return <StyledComponent pokemons={filteredPokemons} {...rest} />;
 };

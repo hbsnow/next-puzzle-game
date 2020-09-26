@@ -24,17 +24,26 @@ const Component: React.FC<Props> = (props) => {
 
   return (
     <div className={className}>
-      <PokemonBoxButtonList
-        selectedArea={selectedArea}
-        setSelectedArea={setSelectedArea}
-      />
+      <div className={`${className}__area`}>
+        <PokemonBoxButtonList
+          selectedArea={selectedArea}
+          setSelectedArea={setSelectedArea}
+        />
+      </div>
 
-      <PokemonBoxTable master={master} selectedArea={selectedArea} />
+      <div>
+        <PokemonBoxTable master={master} selectedArea={selectedArea} />
+      </div>
     </div>
   );
 };
 
-const StyledComponent = styled(Component)``;
+const StyledComponent = styled(Component)`
+  & > &__area {
+    position: sticky;
+    top: 0;
+  }
+`;
 
 export const PokemonBox: React.FC = () => {
   const dispatch = useDispatch();

@@ -1,7 +1,8 @@
 import React from "react";
 
-import Link from "next/link";
 import styled from "styled-components";
+
+import { AppHeaderMenu } from "./AppHeaderMenu";
 
 type Props = {
   className?: string;
@@ -13,9 +14,7 @@ const Component: React.FC<Props> = ({ className }) => {
       <h1 className={`${className}__siteName`}>Lucky Pokemon Share</h1>
 
       <div className={`${className}__link`}>
-        <Link href="/signout">
-          <a>Sign Out</a>
-        </Link>
+        <AppHeaderMenu />
       </div>
     </div>
   );

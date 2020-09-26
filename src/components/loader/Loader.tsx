@@ -45,7 +45,7 @@ const Component: React.FC<Props> = (props) => {
 const StyledComponent = styled(Component)`
   position: relative;
 
-  &__overlay {
+  & > &__overlay {
     position: ${(props) => (props.isCoverScreen ? "fixed" : "absolute")};
     top: 0;
     left: 0;

@@ -1,10 +1,29 @@
 import React from "react";
 
 import { useDispatch, useSelector } from "react-redux";
+import styled from "styled-components";
 
 import { RootState } from "../../store";
 import { updatePokemons } from "../../store/userSlice";
 import { updatePokemonBox } from "../../utils/pokemon";
+
+type Props = {
+  className?: string;
+  clickHandler: () => void;
+};
+
+const Component: React.FC<Props> = ({ className, clickHandler }) => {
+  return (
+    <div className={className}>
+      <button onClick={clickHandler}>submit</button>
+    </div>
+  );
+};
+
+const StyledComponent = styled(Component)`
+  position: sticky;
+  bottom: 0;
+`;
 
 export const AppFooter: React.FC = () => {
   const dispatch = useDispatch();
@@ -30,10 +49,5 @@ export const AppFooter: React.FC = () => {
     );
   };
 
-  return (
-    <div style={{ position: "fixed", bottom: 0, right: 0 }}>
-      <div>{user?.userId}</div>
-      <button onClick={clickHandler}>submit</button>
-    </div>
-  );
+  return <StyledComponent clickHandler={clickHandler} />;
 };
