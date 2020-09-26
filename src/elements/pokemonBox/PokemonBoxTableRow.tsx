@@ -55,6 +55,7 @@ export const PokemonBoxTableRow: React.FC<ContainerProps> = ({
 }) => {
   const dispatch = useDispatch();
   const { user } = useSelector((state: RootState) => state.user);
+  const { changedPokemons } = useSelector((state: RootState) => state.pokemons);
 
   const changeAmount = (data: SyntheticEvent<HTMLInputElement>) => {
     const target = data.currentTarget;
@@ -64,13 +65,28 @@ export const PokemonBoxTableRow: React.FC<ContainerProps> = ({
       return;
     }
 
-    dispatch(
-      setChangedPokemons({
-        area: pokemon.area,
-        no: pokemon.no,
-        amount,
-      })
-    );
+    const existChangedPokemon = changedPokemons.some((userPokemon) => {
+      return userPokemon.no === pokemon.no && userPokemon.area === pokemon.area;
+    });
+
+    if (!existChangedPokemon) {
+      const addedPokemon = { no: pokemon.no, area: pokemon.area, amount };
+      dispatch(setChangedPokemons([...changedPokemons, addedPokemon]));
+      return;
+    }
+
+    const pokemons = changedPokemons.map((changedPokemon) => {
+      if (
+        changedPokemon.no === pokemon.no &&
+        changedPokemon.area === pokemon.area
+      ) {
+        return { no: pokemon.no, area: pokemon.area, amount };
+      }
+
+      return changedPokemon;
+    });
+
+    dispatch(setChangedPokemons(pokemons));
   };
 
   const initialAmount = useMemo(() => {

@@ -89,7 +89,7 @@ export const AuthGuard: React.FC = (props) => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (user) {
+    if (user || router.pathname === "/") {
       return;
     }
 

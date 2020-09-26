@@ -1,28 +1,30 @@
 import React from "react";
 
+import styled from "styled-components";
+
 import { AppFooter } from "../elements/app/AppFooter";
 import { AppHeader } from "../elements/app/AppHeader";
-import {
-  Layout,
-  LayoutHeader,
-  LayoutBody,
-  LayoutFooter,
-} from "../elements/layout/Layout";
 
-export const AppTemplate: React.FC = ({ children }) => {
+type Props = {
+  className?: string;
+};
+
+const Component: React.FC<Props> = ({ children, className }) => {
   return (
-    <Layout>
-      <LayoutHeader>
-        <header>
-          <AppHeader />
-        </header>
-      </LayoutHeader>
-      <LayoutBody>{children}</LayoutBody>
-      <LayoutFooter>
-        <footer>
-          <AppFooter />
-        </footer>
-      </LayoutFooter>
-    </Layout>
+    <div className={className}>
+      <header>
+        <AppHeader />
+      </header>
+
+      <div className={`${className}__body`}>{children}</div>
+
+      <footer>
+        <AppFooter />
+      </footer>
+    </div>
   );
 };
+
+const StyledComponent = styled(Component)``;
+
+export const AppTemplate = StyledComponent;
