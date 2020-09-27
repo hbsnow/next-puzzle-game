@@ -15,8 +15,12 @@ const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
   }
 
+  html, body {
+    min-height: 100%;
+  }
+
   body {
-    background-color: #ddd;
+    background: #a1c4fd linear-gradient(to top, #a1c4fd 0%, #c2e9fb 100%) fixed;
     margin: 0;
     padding: 0;
 

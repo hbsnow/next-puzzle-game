@@ -31,7 +31,13 @@ const Component: React.FC<Props> = ({ className, master, pokemons }) => {
   );
 };
 
-const StyledComponent = styled(Component)``;
+const StyledComponent = styled(Component)`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 12rem);
+  justify-content: center;
+  gap: 0.25rem;
+  padding: 0.25rem;
+`;
 
 export const UserPokemonBoxTable: React.FC<ContainerProps> = (props) => {
   return <StyledComponent {...props} />;
