@@ -42,6 +42,7 @@ const StyledComponent = styled(Component)`
   & > &__area {
     position: sticky;
     top: 0;
+    background: #fff;
   }
 `;
 

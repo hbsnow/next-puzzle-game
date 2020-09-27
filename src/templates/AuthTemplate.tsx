@@ -75,7 +75,7 @@ const authLayoutContentVariants = {
       display: "none",
     },
   },
-};
+} as const;
 
 const StyledComponent = styled(Component)`
   min-height: 100vh;
