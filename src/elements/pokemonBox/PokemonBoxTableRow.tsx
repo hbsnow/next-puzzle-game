@@ -76,15 +76,11 @@ export const PokemonBoxTableRow: React.FC<ContainerProps> = ({
   };
 
   const initialAmount = useMemo(() => {
-    const currentPokemon = user?.pokemons.filter((userPokemon) => {
+    const currentPokemon = user?.pokemons.find((userPokemon) => {
       return userPokemon.no === pokemon.no && userPokemon.area === pokemon.area;
     });
 
-    if (!currentPokemon || !currentPokemon.length) {
-      return 0;
-    }
-
-    return currentPokemon[0].amount;
+    return currentPokemon?.amount ?? 0;
   }, [pokemon.area, pokemon.no, user?.pokemons]);
 
   return (
